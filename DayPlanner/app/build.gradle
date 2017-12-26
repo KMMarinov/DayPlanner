@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.kalinmarinov.dayplanner"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -17,19 +17,32 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-   
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    // RxJava
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.0.8'
 
+    // Espresso testing
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    // Mockito and JUnit
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.13.0'
+
+    // Room
+    implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    androidTestImplementation "android.arch.persistence.room:testing:$rootProject.roomVersion"
 }
