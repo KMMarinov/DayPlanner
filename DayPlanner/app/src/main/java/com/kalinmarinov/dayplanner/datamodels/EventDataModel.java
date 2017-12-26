@@ -1,6 +1,6 @@
 package com.kalinmarinov.dayplanner.datamodels;
 
-import com.kalinmarinov.dayplanner.database.datasource.EventDataSource;
+import com.kalinmarinov.dayplanner.database.datasources.EventDataSource;
 import com.kalinmarinov.dayplanner.models.Event;
 
 import java.util.List;

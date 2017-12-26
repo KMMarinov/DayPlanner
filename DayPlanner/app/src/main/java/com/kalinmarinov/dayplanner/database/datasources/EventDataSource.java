@@ -1,4 +1,4 @@
-package com.kalinmarinov.dayplanner.database.datasource;
+package com.kalinmarinov.dayplanner.database.datasources;
 
 import com.kalinmarinov.dayplanner.models.Event;
 
