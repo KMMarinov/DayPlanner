@@ -24,13 +24,13 @@ import static org.mockito.Mockito.verify;
  * Created by Kalin.Marinov on 26.12.2017.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class EventDataModelTest {
+public class EventDataModelImplTest {
 
     @Mock
     private EventDataSource eventDataSource;
 
     @InjectMocks
-    private EventDataModel eventDataModel;
+    private EventDataModelImpl eventDataModel;
 
     @Test
     public void shouldReturnListOfEvents() {
