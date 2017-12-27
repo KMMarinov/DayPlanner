@@ -2,6 +2,7 @@ package com.kalinmarinov.dayplanner.datamodels;
 
 import com.kalinmarinov.dayplanner.database.datasources.EventDataSource;
 import com.kalinmarinov.dayplanner.models.Event;
+import io.reactivex.Flowable;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class EventDataModel {
         this.eventDataSource = eventDataSource;
     }
 
-    public List<Event> getEvents() {
+    public Flowable<List<Event>> getEvents() {
         return eventDataSource.findAll();
     }
 

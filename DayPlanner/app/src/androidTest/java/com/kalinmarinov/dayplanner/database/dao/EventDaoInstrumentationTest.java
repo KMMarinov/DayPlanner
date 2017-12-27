@@ -1,19 +1,24 @@
 package com.kalinmarinov.dayplanner.database.dao;
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import com.kalinmarinov.dayplanner.database.roomdatabases.EventsDatabase;
 import com.kalinmarinov.dayplanner.models.Event;
+import io.reactivex.Flowable;
+import io.reactivex.subscribers.TestSubscriber;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -27,10 +32,13 @@ public class EventDaoInstrumentationTest {
     private EventDao eventDao;
     private EventsDatabase eventsDatabase;
 
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+
     @Before
     public void createDatabase() {
         final Context context = InstrumentationRegistry.getTargetContext();
-        eventsDatabase = Room.inMemoryDatabaseBuilder(context, EventsDatabase.class).build();
+        eventsDatabase = Room.inMemoryDatabaseBuilder(context, EventsDatabase.class).allowMainThreadQueries().build();
         eventDao = eventsDatabase.getEventDao();
     }
 
@@ -50,7 +58,7 @@ public class EventDaoInstrumentationTest {
         eventDao.save(event);
 
         // then
-        final List<Event> events = eventDao.findAll();
+        final List<Event> events = eventDao.findAll().blockingFirst();
         assertThat(events.size(), is(1));
         final Event newEvent = events.get(0);
         assertThat(newEvent.getId(), is(1));
@@ -62,14 +70,16 @@ public class EventDaoInstrumentationTest {
         // given
         final Event event = new Event();
         eventDao.save(event);
-        final Event persistedEvent = eventDao.findAll().get(0);
+        final Event persistedEvent = eventDao.findAll().blockingFirst().get(0);
 
         // when
         eventDao.delete(persistedEvent);
 
         // then
-        final List<Event> events = eventDao.findAll();
-        assertThat(events.size(), is(0));
+        final TestSubscriber<List<Event>> testSubscriber = eventDao.findAll().test();
+        testSubscriber.assertNoErrors();
+        final List<Event> events = testSubscriber.values().get(0);
+        assertThat(events, is(empty()));
     }
 
     @Test
@@ -81,11 +91,13 @@ public class EventDaoInstrumentationTest {
         eventDao.save(event);
 
         // when
-        final List<Event> events = eventDao.findAll();
+        final Flowable<List<Event>> eventsFlowable = eventDao.findAll();
 
         // then
-        assertThat(events.size(), is(1));
-        final Event newEvent = events.get(0);
+        final TestSubscriber<List<Event>> testSubscriber = eventsFlowable.test();
+        testSubscriber.assertNoErrors();
+        testSubscriber.assertValueCount(1);
+        final Event newEvent = testSubscriber.values().get(0).get(0);
         assertThat(newEvent.getId(), is(1));
         assertThat(newEvent.getName(), equalTo(testName));
     }
@@ -99,9 +111,13 @@ public class EventDaoInstrumentationTest {
         eventDao.save(event);
 
         // when
-        final Event foundEvent = eventDao.findByName(testName);
+        final Flowable<Event> eventSingle = eventDao.findByName(testName);
+        final TestSubscriber<Event> testObserver = eventSingle.test();
 
         // then
+        testObserver.assertNoErrors();
+        testObserver.assertValueCount(1);
+        final Event foundEvent = testObserver.values().get(0);
         assertThat(foundEvent, is(notNullValue()));
         assertThat(foundEvent.getId(), is(1));
         assertThat(foundEvent.getName(), equalTo(testName));

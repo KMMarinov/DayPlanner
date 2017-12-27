@@ -2,6 +2,7 @@ package com.kalinmarinov.dayplanner.database.datasources;
 
 import com.kalinmarinov.dayplanner.database.dao.EventDao;
 import com.kalinmarinov.dayplanner.models.Event;
+import io.reactivex.Flowable;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class EventDataSourceImpl implements EventDataSource {
     }
 
     @Override
-    public List<Event> findAll() {
+    public Flowable<List<Event>> findAll() {
         return eventDao.findAll();
     }
 

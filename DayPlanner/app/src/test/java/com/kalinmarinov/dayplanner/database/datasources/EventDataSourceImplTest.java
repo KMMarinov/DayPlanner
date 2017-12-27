@@ -2,6 +2,8 @@ package com.kalinmarinov.dayplanner.database.datasources;
 
 import com.kalinmarinov.dayplanner.database.dao.EventDao;
 import com.kalinmarinov.dayplanner.models.Event;
+import io.reactivex.Flowable;
+import io.reactivex.subscribers.TestSubscriber;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -33,12 +35,17 @@ public class EventDataSourceImplTest {
     @Test
     public void shouldReturnListOfEvents() {
         // given
-        given(eventDao.findAll()).willReturn(Arrays.asList(new Event(), new Event()));
+        final Flowable<List<Event>> eventFlowableData = Flowable.just(Arrays.asList(new Event(), new Event()));
+        given(eventDao.findAll()).willReturn(eventFlowableData);
 
         // when
-        final List<Event> events = eventDataSource.findAll();
+        final Flowable<List<Event>> eventsFlowable = eventDataSource.findAll();
 
         // then
+        final TestSubscriber<List<Event>> testSubscriber = eventsFlowable.test();
+        testSubscriber.assertNoErrors();
+        testSubscriber.assertValueCount(1);
+        final List<Event> events = eventsFlowable.blockingFirst();
         assertThat(events, is(notNullValue()));
         assertThat(events.size(), is(2));
     }

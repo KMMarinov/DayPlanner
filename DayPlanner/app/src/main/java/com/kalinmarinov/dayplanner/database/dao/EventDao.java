@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import com.kalinmarinov.dayplanner.models.Event;
+import io.reactivex.Flowable;
 
 import java.util.List;
 
@@ -16,10 +17,10 @@ import java.util.List;
 public interface EventDao {
 
     @Query("SELECT * FROM events")
-    List<Event> findAll();
+    Flowable<List<Event>> findAll();
 
-    @Query("SELECT * FROM events where name=:name")
-    Event findByName(final String name);
+    @Query("SELECT * FROM events WHERE name=:name")
+    Flowable<Event> findByName(final String name);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void save(final Event event);

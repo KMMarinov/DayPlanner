@@ -1,6 +1,7 @@
 package com.kalinmarinov.dayplanner.database.datasources;
 
 import com.kalinmarinov.dayplanner.models.Event;
+import io.reactivex.Flowable;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public interface EventDataSource {
 
-    List<Event> findAll();
+    Flowable<List<Event>> findAll();
 
     void save(final Event event);
 

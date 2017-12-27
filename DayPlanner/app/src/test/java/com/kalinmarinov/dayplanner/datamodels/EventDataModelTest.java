@@ -2,6 +2,8 @@ package com.kalinmarinov.dayplanner.datamodels;
 
 import com.kalinmarinov.dayplanner.database.datasources.EventDataSource;
 import com.kalinmarinov.dayplanner.models.Event;
+import io.reactivex.Flowable;
+import io.reactivex.subscribers.TestSubscriber;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -33,12 +35,17 @@ public class EventDataModelTest {
     @Test
     public void shouldReturnListOfEvents() {
         // given
-        given(eventDataSource.findAll()).willReturn(Arrays.asList(new Event(), new Event()));
+        final Flowable<List<Event>> eventFlowableData = Flowable.just(Arrays.asList(new Event(), new Event()));
+        given(eventDataSource.findAll()).willReturn(eventFlowableData);
 
         // when
-        final List<Event> events = eventDataModel.getEvents();
+        final Flowable<List<Event>> eventsFlowable = eventDataModel.getEvents();
 
         // then
+        final TestSubscriber<List<Event>> testSubscriber = eventsFlowable.test();
+        testSubscriber.assertValueCount(1);
+        testSubscriber.assertNoErrors();
+        final List<Event> events = testSubscriber.values().get(0);
         assertThat(events, is(notNullValue()));
         assertThat(events.size(), is(2));
     }
