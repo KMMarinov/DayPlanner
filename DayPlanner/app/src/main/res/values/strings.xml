@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">DayPlanner</string>
+    
+    <!-- create event strings -->
+    <string name="create_event_label_name">Name</string>
+    <string name="create_event_label_description">Description</string>
+    <string name="create_event_label_start_date">Start Date</string>
+    <string name="create_event_label_end_date">End Date</string>
+    <string name="create_event_save_button">Save</string>
+    
+    <!-- list events menu -->
+    <string name="list_events_menu_add_action">Add</string>
+    
+    <!-- other -->
+    <string name="datetime_hint">dd-MM-yyyy HH:mm:ss</string>
 </resources>

@@ -13,6 +13,8 @@ public interface EventViewModel {
     Flowable<List<String>> getEventNames();
 
     void save(final Event event);
-    
+
+    void saveEvent(final String name, final String description, final String startDate, final String endDate);
+
     void deleteEvent(final Event event);
 }
