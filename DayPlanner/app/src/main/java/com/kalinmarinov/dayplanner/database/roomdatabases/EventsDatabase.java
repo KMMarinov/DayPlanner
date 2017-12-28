@@ -20,7 +20,7 @@ import static com.kalinmarinov.dayplanner.database.roomdatabases.EventsDatabase.
 @TypeConverters(DateConverters.class)
 public abstract class EventsDatabase extends RoomDatabase {
 
-    private static final String DATABASE_NAME = "event-database";
+    public static final String DATABASE_NAME = "event-database";
 
     static final int EVENTS_DATABASE_VERSION = 1;
 
