@@ -9,12 +9,12 @@ import com.kalinmarinov.dayplanner.database.providers.EventDaoProvider;
 import com.kalinmarinov.dayplanner.database.providers.EventDaoProviderImpl;
 import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
 import com.kalinmarinov.dayplanner.datamodels.EventDataModelImpl;
-import com.kalinmarinov.dayplanner.viewmodels.EventViewModelImpl;
+import com.kalinmarinov.dayplanner.viewmodels.EventsViewModelImpl;
 
 /**
  * Created by Kalin.Marinov on 27.12.2017.
  */
-public class EventViewModelFactory implements ViewModelProvider.Factory {
+public class EventsViewModelFactory implements ViewModelProvider.Factory {
 
     @NonNull
     @Override
@@ -23,6 +23,6 @@ public class EventViewModelFactory implements ViewModelProvider.Factory {
         final EventDaoProvider eventDaoProvider = new EventDaoProviderImpl();
         final EventDataSource eventDataSource = new EventDataSourceImpl(eventDaoProvider.getEventDao());
         final EventDataModel eventDataModel = new EventDataModelImpl(eventDataSource);
-        return (T) new EventViewModelImpl(eventDataModel);
+        return (T) new EventsViewModelImpl(eventDataModel);
     }
 }

@@ -17,7 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".views.CreateEventActivity">
+        <activity android:name=".views.CreateEditEventActivity">
+        </activity>
+        <activity android:name=".views.ShowEventActivity">
+        </activity>
+        <activity android:name=".views.EventCalendarActivity">
         </activity>
     </application>
 

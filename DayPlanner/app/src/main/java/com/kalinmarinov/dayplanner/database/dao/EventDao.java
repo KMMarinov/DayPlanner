@@ -19,8 +19,8 @@ public interface EventDao {
     @Query("SELECT * FROM events")
     Flowable<List<Event>> findAll();
 
-    @Query("SELECT * FROM events WHERE name=:name")
-    Flowable<Event> findByName(final String name);
+    @Query("SELECT * FROM events where id=:eventId")
+    Flowable<Event> findById(final int eventId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void save(final Event event);

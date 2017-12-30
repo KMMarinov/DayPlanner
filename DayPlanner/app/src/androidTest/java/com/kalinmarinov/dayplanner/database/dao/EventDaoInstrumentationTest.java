@@ -111,7 +111,7 @@ public class EventDaoInstrumentationTest {
         eventDao.save(event);
 
         // when
-        final Flowable<Event> eventSingle = eventDao.findByName(testName);
+        final Flowable<Event> eventSingle = eventDao.findById(1);
         final TestSubscriber<Event> testObserver = eventSingle.test();
 
         // then

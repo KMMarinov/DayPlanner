@@ -5,71 +5,74 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.kalinmarinov.dayplanner.views.CreateEventActivity">
+        tools:context="com.kalinmarinov.dayplanner.views.CreateEditEventActivity">
 
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:labelFor="@+id/createEventEditTextName" android:text="@string/create_event_label_name"
-              app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp" android:id="@+id/createEventTextViewName"
+              android:labelFor="@+id/createEditEventEditTextName" android:text="@string/event_model_label_name"
+              app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp"
+              android:id="@+id/viewEventTextViewLabelName"
               app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
     <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
-              android:id="@+id/createEventEditTextName" android:fontFamily="sans-serif"
-              app:layout_constraintTop_toBottomOf="@+id/createEventTextViewName"
+              android:id="@+id/createEditEventEditTextName" android:fontFamily="sans-serif"
+              app:layout_constraintTop_toBottomOf="@+id/viewEventTextViewLabelName"
               android:layout_marginTop="8dp"
               app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
               android:layout_marginStart="8dp" android:layout_marginEnd="8dp"/>
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:text="@string/create_event_label_description"
-              android:labelFor="@+id/createEventEditTextDescription"
-              android:id="@+id/createEventTextViewDescription"
-              app:layout_constraintTop_toBottomOf="@+id/createEventEditTextName" android:layout_marginTop="16dp"
+              android:text="@string/event_model_label_description"
+              android:labelFor="@+id/createEditEventEditTextDescription"
+              android:id="@+id/viewEventTextViewLabelDescription"
+              app:layout_constraintTop_toBottomOf="@+id/createEditEventEditTextName" android:layout_marginTop="16dp"
               app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
     <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
-              android:id="@+id/createEventEditTextDescription" android:fontFamily="sans-serif"
-              app:layout_constraintTop_toBottomOf="@+id/createEventTextViewDescription" android:layout_marginTop="8dp"
+              android:id="@+id/createEditEventEditTextDescription" android:fontFamily="sans-serif"
+              app:layout_constraintTop_toBottomOf="@+id/viewEventTextViewLabelDescription"
+              android:layout_marginTop="8dp"
               app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
               android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:text="@string/create_event_label_start_date"
-              android:labelFor="@+id/createEventEditTextStartDate"
-              android:id="@+id/createEventTextViewStartDate"
-              app:layout_constraintTop_toBottomOf="@+id/createEventEditTextDescription"
+              android:text="@string/event_model_label_start_date"
+              android:labelFor="@+id/createEditEventEditTextStartDate"
+              android:id="@+id/viewEventTextLabelViewStartDate"
+              app:layout_constraintTop_toBottomOf="@+id/createEditEventEditTextDescription"
               android:layout_marginTop="16dp" app:layout_constraintStart_toStartOf="parent"
               android:layout_marginStart="8dp"/>
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:id="@+id/createEventEditTextStartDate"
+            android:id="@+id/createEditEventEditTextStartDate"
             android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintTop_toBottomOf="@+id/createEventTextViewStartDate"
+            app:layout_constraintTop_toBottomOf="@+id/viewEventTextLabelViewStartDate"
             android:layout_marginTop="8dp" android:hint="@string/datetime_hint"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:text="@string/create_event_label_end_date"
-              android:labelFor="@+id/createEventEditTextEndDate"
-              android:id="@+id/createEventTextViewEndDate"
+              android:text="@string/event_model_label_end_date"
+              android:labelFor="@+id/createEditEventEditTextEndDate"
+              android:id="@+id/viewEventTextViewLabelEndDate"
               app:layout_constraintStart_toStartOf="parent"
               android:layout_marginStart="8dp"
-              app:layout_constraintTop_toBottomOf="@+id/createEventEditTextStartDate" android:layout_marginTop="16dp"/>
+              app:layout_constraintTop_toBottomOf="@+id/createEditEventEditTextStartDate"
+              android:layout_marginTop="16dp"/>
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:id="@+id/createEventEditTextEndDate"
+            android:id="@+id/createEditEventEditTextEndDate"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintTop_toBottomOf="@+id/createEventTextViewEndDate"
+            app:layout_constraintTop_toBottomOf="@+id/viewEventTextViewLabelEndDate"
             android:layout_marginTop="8dp" android:hint="@string/datetime_hint"/>
     <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:id="@+id/createEventSaveButton" android:text="@string/create_event_save_button"
+            android:id="@+id/createEditEventSaveButton" android:text="@string/create_edit_event_save_button"
             android:textAlignment="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp" app:layout_constraintTop_toBottomOf="@+id/createEventEditTextEndDate"
+            android:layout_marginStart="8dp" app:layout_constraintTop_toBottomOf="@+id/createEditEventEditTextEndDate"
             android:layout_marginTop="16dp"/>
 </android.support.constraint.ConstraintLayout>

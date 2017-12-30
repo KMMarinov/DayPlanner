@@ -1,16 +1,26 @@
 <resources>
     <string name="app_name">DayPlanner</string>
-    
-    <!-- create event strings -->
-    <string name="create_event_label_name">Name</string>
-    <string name="create_event_label_description">Description</string>
-    <string name="create_event_label_start_date">Start Date</string>
-    <string name="create_event_label_end_date">End Date</string>
-    <string name="create_event_save_button">Save</string>
-    
+
+    <!-- event model -->
+    <string name="event_model_label_name">Name</string>
+    <string name="event_model_label_description">Description</string>
+    <string name="event_model_label_start_date">Start Date</string>
+    <string name="event_model_label_end_date">End Date</string>
+
+    <!-- create and edit event -->
+    <string name="create_edit_event_save_button">Save</string>
+
     <!-- list events menu -->
     <string name="list_events_menu_add_action">Add</string>
-    
+
+    <!-- view event -->
+    <string name="view_event_delete">Delete</string>
+    <string name="view_event_edit">Edit</string>
+
+    <!-- generic menu -->
+    <string name="generic_menu_back_action">Back</string>
+
     <!-- other -->
     <string name="datetime_hint">dd-MM-yyyy HH:mm:ss</string>
+    <string name="empty_text_holder">Empty</string>
 </resources>
