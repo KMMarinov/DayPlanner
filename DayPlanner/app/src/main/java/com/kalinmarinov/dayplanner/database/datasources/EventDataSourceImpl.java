@@ -3,7 +3,6 @@ package com.kalinmarinov.dayplanner.database.datasources;
 import com.kalinmarinov.dayplanner.database.dao.EventDao;
 import com.kalinmarinov.dayplanner.models.Event;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 
 import java.util.List;
 
@@ -29,12 +28,12 @@ public class EventDataSourceImpl implements EventDataSource {
     }
 
     @Override
-    public void save(final Event event) {
-        eventDao.save(event);
+    public long save(final Event event) {
+        return eventDao.save(event);
     }
 
     @Override
-    public void delete(final Event event) {
-        eventDao.delete(event);
+    public int delete(final Event event) {
+        return eventDao.delete(event);
     }
 }

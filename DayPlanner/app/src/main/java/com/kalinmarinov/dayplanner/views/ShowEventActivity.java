@@ -13,9 +13,7 @@ import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModelImpl;
 import com.kalinmarinov.dayplanner.viewmodels.factories.SingleEventViewModelFactory;
 import com.kalinmarinov.dayplanner.views.base.AppCompatMenuActivity;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class ShowEventActivity extends AppCompatMenuActivity {
 
@@ -48,10 +46,7 @@ public class ShowEventActivity extends AppCompatMenuActivity {
         final int eventId = ActivityUtils.getExtra(getIntent(), Constants.EVENT_INTENT_ID_EXTRA_KEY);
         if (eventId != 0) {
             // TODO: handle on error
-            compositeDisposable.add(singleEventViewModel.getEvent(eventId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::setupEvent));
+            compositeDisposable.add(singleEventViewModel.getEvent(eventId).subscribe(this::setupEvent));
         }
     }
 
@@ -85,8 +80,7 @@ public class ShowEventActivity extends AppCompatMenuActivity {
     }
 
     private void onDeleteButtonClick(final Event event) {
-        // TODO: Use on complete
-        singleEventViewModel.deleteEvent(event);
-        finish();
+        // TODO: Add error handling and on success message
+        singleEventViewModel.deleteEvent(event).subscribe(this::finish);
     }
 }

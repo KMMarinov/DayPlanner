@@ -14,9 +14,7 @@ import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModelImpl;
 import com.kalinmarinov.dayplanner.viewmodels.factories.SingleEventViewModelFactory;
 import com.kalinmarinov.dayplanner.views.base.AppCompatMenuActivity;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class CreateEditEventActivity extends AppCompatMenuActivity {
 
@@ -65,10 +63,7 @@ public class CreateEditEventActivity extends AppCompatMenuActivity {
         final int eventId = ActivityUtils.getExtra(getIntent(), Constants.EVENT_INTENT_ID_EXTRA_KEY);
         if (eventId != 0) {
             // TODO: handle on error
-            eventDisposable = singleEventViewModel.getEventSingle(eventId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::showEvent);
+            eventDisposable = singleEventViewModel.getEventSingle(eventId).subscribe(this::showEvent);
         }
     }
 
@@ -85,7 +80,6 @@ public class CreateEditEventActivity extends AppCompatMenuActivity {
         final String startDate = startDateEditText.getText().toString().trim();
         final String endDate = endDateEditText.getText().toString().trim();
         // TODO: Should check if the operation was successful, e.g using RxJava Completable
-        singleEventViewModel.saveEvent(name, description, startDate, endDate);
-        finish();
+        singleEventViewModel.saveEvent(name, description, startDate, endDate).subscribe(this::finish);
     }
 }

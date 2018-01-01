@@ -23,8 +23,8 @@ public interface EventDao {
     Flowable<Event> findById(final int eventId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void save(final Event event);
+    long save(final Event event);
 
     @Delete
-    void delete(final Event event);
+    int delete(final Event event);
 }

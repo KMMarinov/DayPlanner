@@ -3,7 +3,6 @@ package com.kalinmarinov.dayplanner.datamodels;
 import com.kalinmarinov.dayplanner.database.datasources.EventDataSource;
 import com.kalinmarinov.dayplanner.models.Event;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 
 import java.util.List;
 
@@ -27,11 +26,11 @@ public class EventDataModelImpl implements EventDataModel {
         return eventDataSource.findById(eventId);
     }
 
-    public void deleteEvent(final Event event) {
-        eventDataSource.delete(event);
+    public int deleteEvent(final Event event) {
+        return eventDataSource.delete(event);
     }
 
-    public void saveEvent(final Event event) {
-        eventDataSource.save(event);
+    public long saveEvent(final Event event) {
+        return eventDataSource.save(event);
     }
 }

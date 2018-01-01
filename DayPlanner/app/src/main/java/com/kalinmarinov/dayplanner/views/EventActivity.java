@@ -15,9 +15,7 @@ import com.kalinmarinov.dayplanner.viewmodels.EventsViewModel;
 import com.kalinmarinov.dayplanner.viewmodels.EventsViewModelImpl;
 import com.kalinmarinov.dayplanner.viewmodels.factories.EventsViewModelFactory;
 import com.kalinmarinov.dayplanner.views.adapters.EventItemListAdapter;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
@@ -44,8 +42,7 @@ public class EventActivity extends AppCompatActivity {
         super.onResume();
         compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(eventViewModel.getEvents()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+
                 .subscribe(this::showEventName));
     }
 

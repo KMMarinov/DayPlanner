@@ -14,7 +14,7 @@ public interface EventDataModel {
 
     Flowable<Event> findById(final int eventId);
 
-    void deleteEvent(final Event event);
+    int deleteEvent(final Event event);
 
-    void saveEvent(final Event event);
+    long saveEvent(final Event event);
 }

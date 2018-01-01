@@ -3,6 +3,7 @@ package com.kalinmarinov.dayplanner.viewmodels;
 import android.arch.lifecycle.ViewModel;
 import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
 import com.kalinmarinov.dayplanner.models.Event;
+import com.kalinmarinov.dayplanner.providers.SchedulerProvider;
 import io.reactivex.Flowable;
 
 import java.util.List;
@@ -18,11 +19,10 @@ public class EventsViewModelImpl extends ViewModel implements EventsViewModel {
         this.eventDataModel = eventDataModel;
     }
 
+    @Override
     public Flowable<List<Event>> getEvents() {
-        return eventDataModel.getEvents();
-    }
-
-    public void deleteEvent(final Event event) {
-        eventDataModel.deleteEvent(event);
+        return eventDataModel.getEvents()
+                .subscribeOn(SchedulerProvider.getInstance().getIOScheduler())
+                .observeOn(SchedulerProvider.getInstance().getMainScheduler());
     }
 }
