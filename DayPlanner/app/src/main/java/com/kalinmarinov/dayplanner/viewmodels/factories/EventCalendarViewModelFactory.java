@@ -9,7 +9,10 @@ import com.kalinmarinov.dayplanner.database.providers.EventDaoProvider;
 import com.kalinmarinov.dayplanner.database.providers.EventDaoProviderImpl;
 import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
 import com.kalinmarinov.dayplanner.datamodels.EventDataModelImpl;
+import com.kalinmarinov.dayplanner.viewmodels.EventCalendarViewModel;
 import com.kalinmarinov.dayplanner.viewmodels.EventCalendarViewModelImpl;
+import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
+import com.kalinmarinov.dayplanner.viewmodels.factories.exceptions.ViewModelFactoryMismatchException;
 
 /**
  * Created by Kalin.Marinov on 30.12.2017.
@@ -19,7 +22,9 @@ public class EventCalendarViewModelFactory implements ViewModelProvider.Factory 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull final Class<T> modelClass) {
-        //TODO: check the modelClass and throw exception if it doesn't match
+        if (!EventCalendarViewModel.class.isAssignableFrom(modelClass)) {
+            throw new ViewModelFactoryMismatchException(modelClass, SingleEventViewModel.class);
+        }
         final EventDaoProvider eventDaoProvider = new EventDaoProviderImpl();
         final EventDataSource eventDataSource = new EventDataSourceImpl(eventDaoProvider.getEventDao());
         final EventDataModel eventDataModel = new EventDataModelImpl(eventDataSource);

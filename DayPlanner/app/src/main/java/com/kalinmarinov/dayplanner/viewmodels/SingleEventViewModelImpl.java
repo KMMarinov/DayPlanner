@@ -34,9 +34,7 @@ public class SingleEventViewModelImpl extends ViewModel implements SingleEventVi
     @Override
     public Single<Event> getEventSingle(final int eventId) {
         //TODO: add object that will be convenient for the view. Facilitating date handling
-        return eventDataModel.findById(eventId)
-                .map(e -> event = e)
-                .firstOrError()
+        return eventDataModel.findById(eventId).map(e -> event = e).firstOrError()
                 .subscribeOn(SchedulerProvider.getInstance().getIOScheduler())
                 .observeOn(SchedulerProvider.getInstance().getMainScheduler());
     }
@@ -44,14 +42,16 @@ public class SingleEventViewModelImpl extends ViewModel implements SingleEventVi
     @Override
     public Completable saveEvent(final String name, final String description, final String startDate,
                                  final String endDate) {
-        final Date parsedStartDate = DateUtils.parseDate(startDate);
-        final Date parsedEndDate = DateUtils.parseDate(endDate);
-        getEvent().setDescription(description);
-        getEvent().setName(name);
-        getEvent().setStartDate(parsedStartDate);
-        getEvent().setEndDate(parsedEndDate);
-        return Completable.fromAction(() -> eventDataModel.saveEvent(getEvent()))
-                .subscribeOn(SchedulerProvider.getInstance().getIOScheduler())
+        return Completable.fromAction(() -> {
+            // TODO: create custom class that will be able to parse date
+            final Date parsedStartDate = DateUtils.parseDate(startDate);
+            final Date parsedEndDate = DateUtils.parseDate(endDate);
+            getEvent().setDescription(description);
+            getEvent().setName(name);
+            getEvent().setStartDate(parsedStartDate);
+            getEvent().setEndDate(parsedEndDate);
+            eventDataModel.saveEvent(getEvent());
+        }).subscribeOn(SchedulerProvider.getInstance().getIOScheduler())
                 .observeOn(SchedulerProvider.getInstance().getMainScheduler());
     }
 

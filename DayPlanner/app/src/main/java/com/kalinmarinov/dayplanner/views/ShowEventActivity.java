@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.kalinmarinov.dayplanner.R;
 import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.utils.Constants;
@@ -37,16 +38,17 @@ public class ShowEventActivity extends AppCompatMenuActivity {
         singleEventViewModelFactory = new SingleEventViewModelFactory();
         singleEventViewModel = ViewModelProviders.of(this, singleEventViewModelFactory)
                 .get(SingleEventViewModelImpl.class);
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        compositeDisposable = new CompositeDisposable();
         final int eventId = ActivityUtils.getExtra(getIntent(), Constants.EVENT_INTENT_ID_EXTRA_KEY);
         if (eventId != 0) {
-            // TODO: handle on error
-            compositeDisposable.add(singleEventViewModel.getEvent(eventId).subscribe(this::setupEvent));
+            compositeDisposable.add(singleEventViewModel.getEvent(eventId)
+                    .subscribe(this::setupEvent, throwable -> Toast
+                            .makeText(getBaseContext(), throwable.getMessage(), Toast.LENGTH_LONG).show()));
         }
     }
 
@@ -80,7 +82,8 @@ public class ShowEventActivity extends AppCompatMenuActivity {
     }
 
     private void onDeleteButtonClick(final Event event) {
-        // TODO: Add error handling and on success message
-        singleEventViewModel.deleteEvent(event).subscribe(this::finish);
+        compositeDisposable.add(singleEventViewModel.deleteEvent(event)
+                .subscribe(this::finish, throwable -> Toast
+                        .makeText(getBaseContext(), throwable.getMessage(), Toast.LENGTH_LONG).show()));
     }
 }

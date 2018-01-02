@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.kalinmarinov.dayplanner.R;
 import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.utils.Constants;
@@ -62,8 +63,8 @@ public class CreateEditEventActivity extends AppCompatMenuActivity {
     private void fetchEvent() {
         final int eventId = ActivityUtils.getExtra(getIntent(), Constants.EVENT_INTENT_ID_EXTRA_KEY);
         if (eventId != 0) {
-            // TODO: handle on error
-            eventDisposable = singleEventViewModel.getEventSingle(eventId).subscribe(this::showEvent);
+            eventDisposable = singleEventViewModel.getEventSingle(eventId).subscribe(this::showEvent, throwable -> Toast
+                    .makeText(getBaseContext(), throwable.getMessage(), Toast.LENGTH_LONG).show());
         }
     }
 
@@ -79,7 +80,7 @@ public class CreateEditEventActivity extends AppCompatMenuActivity {
         final String description = descriptionEditText.getText().toString().trim();
         final String startDate = startDateEditText.getText().toString().trim();
         final String endDate = endDateEditText.getText().toString().trim();
-        // TODO: Should check if the operation was successful, e.g using RxJava Completable
-        singleEventViewModel.saveEvent(name, description, startDate, endDate).subscribe(this::finish);
+        singleEventViewModel.saveEvent(name, description, startDate, endDate).subscribe(this::finish, throwable -> Toast
+                .makeText(getBaseContext(), throwable.getMessage(), Toast.LENGTH_LONG).show());
     }
 }
