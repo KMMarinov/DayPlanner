@@ -10,6 +10,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.kalinmarinov.dayplanner.R;
+import com.kalinmarinov.dayplanner.di.qualifiers.ViewModelProvided;
 import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.utils.Constants;
 import com.kalinmarinov.dayplanner.utils.android.ActivityUtils;
@@ -22,6 +23,7 @@ import javax.inject.Inject;
 public class CreateEditEventActivity extends InjectableAppCompatMenuActivity {
 
     @Inject
+    @ViewModelProvided
     SingleEventViewModel singleEventViewModel;
 
     private Disposable eventDisposable;

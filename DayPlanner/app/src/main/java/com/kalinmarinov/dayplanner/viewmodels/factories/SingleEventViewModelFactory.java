@@ -1,26 +1,29 @@
 package com.kalinmarinov.dayplanner.viewmodels.factories;
 
 import android.arch.lifecycle.ViewModel;
-import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.support.annotation.NonNull;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
-import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModelImpl;
+import com.kalinmarinov.dayplanner.viewmodels.factories.exceptions.ViewModelFactoryMismatchException;
+import dagger.Lazy;
 
 /**
  * Created by Kalin.Marinov on 27.12.2017.
  */
-public class SingleEventViewModelFactory extends GenericViewModelFactory {
+public class SingleEventViewModelFactory implements ViewModelProvider.Factory {
 
-    public SingleEventViewModelFactory(final EventDataModel eventDataModel) {
-        super(eventDataModel);
+    private Lazy<SingleEventViewModel> singleEventViewModel;
+
+    public SingleEventViewModelFactory(final Lazy<SingleEventViewModel> singleEventViewModel) {
+        this.singleEventViewModel = singleEventViewModel;
     }
 
+    @NonNull
     @Override
-    public Class<?> getClassImpl() {
-        return SingleEventViewModel.class;
-    }
-
-    @Override
-    public <T extends ViewModel> T createViewModel(final EventDataModel eventDataModel) {
-        return (T) new SingleEventViewModelImpl(eventDataModel);
+    public <T extends ViewModel> T create(@NonNull final Class<T> modelClass) {
+        if (!SingleEventViewModel.class.isAssignableFrom(modelClass)) {
+            throw new ViewModelFactoryMismatchException(modelClass, SingleEventViewModel.class);
+        }
+        return (T) singleEventViewModel.get();
     }
 }

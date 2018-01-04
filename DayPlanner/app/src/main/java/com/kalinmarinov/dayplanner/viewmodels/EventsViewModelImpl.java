@@ -14,15 +14,17 @@ import java.util.List;
 public class EventsViewModelImpl extends ViewModel implements EventsViewModel {
 
     private final EventDataModel eventDataModel;
+    private final SchedulerProvider schedulerProvider;
 
-    public EventsViewModelImpl(final EventDataModel eventDataModel) {
+    public EventsViewModelImpl(final EventDataModel eventDataModel, final SchedulerProvider schedulerProvider) {
         this.eventDataModel = eventDataModel;
+        this.schedulerProvider = schedulerProvider;
     }
 
     @Override
     public Flowable<List<Event>> getEvents() {
         return eventDataModel.getEvents()
-                .subscribeOn(SchedulerProvider.getInstance().getIOScheduler())
-                .observeOn(SchedulerProvider.getInstance().getMainScheduler());
+                .subscribeOn(schedulerProvider.getIOScheduler())
+                .observeOn(schedulerProvider.getMainScheduler());
     }
 }

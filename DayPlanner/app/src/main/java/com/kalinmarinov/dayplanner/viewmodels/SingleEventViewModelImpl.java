@@ -17,26 +17,29 @@ import java.util.Date;
 public class SingleEventViewModelImpl extends ViewModel implements SingleEventViewModel {
 
     private final EventDataModel eventDataModel;
+    private final SchedulerProvider schedulerProvider;
+
     private Event event;
 
-    public SingleEventViewModelImpl(final EventDataModel eventDataModel) {
+    public SingleEventViewModelImpl(final EventDataModel eventDataModel, final SchedulerProvider schedulerProvider) {
         this.eventDataModel = eventDataModel;
+        this.schedulerProvider = schedulerProvider;
     }
 
     @Override
     public Flowable<Event> getEvent(final int eventId) {
         //TODO: add object that will be convenient for the view. Facilitating date handling
         return eventDataModel.findById(eventId).map(e -> event = e)
-                .subscribeOn(SchedulerProvider.getInstance().getIOScheduler())
-                .observeOn(SchedulerProvider.getInstance().getMainScheduler());
+                .subscribeOn(schedulerProvider.getIOScheduler())
+                .observeOn(schedulerProvider.getMainScheduler());
     }
 
     @Override
     public Single<Event> getEventSingle(final int eventId) {
         //TODO: add object that will be convenient for the view. Facilitating date handling
         return eventDataModel.findById(eventId).map(e -> event = e).firstOrError()
-                .subscribeOn(SchedulerProvider.getInstance().getIOScheduler())
-                .observeOn(SchedulerProvider.getInstance().getMainScheduler());
+                .subscribeOn(schedulerProvider.getIOScheduler())
+                .observeOn(schedulerProvider.getMainScheduler());
     }
 
     @Override
@@ -51,15 +54,15 @@ public class SingleEventViewModelImpl extends ViewModel implements SingleEventVi
             getEvent().setStartDate(parsedStartDate);
             getEvent().setEndDate(parsedEndDate);
             eventDataModel.saveEvent(getEvent());
-        }).subscribeOn(SchedulerProvider.getInstance().getIOScheduler())
-                .observeOn(SchedulerProvider.getInstance().getMainScheduler());
+        }).subscribeOn(schedulerProvider.getIOScheduler())
+                .observeOn(schedulerProvider.getMainScheduler());
     }
 
     @Override
     public Completable deleteEvent(final Event event) {
         return Completable.fromAction(() -> eventDataModel.deleteEvent(getEvent()))
-                .subscribeOn(SchedulerProvider.getInstance().getIOScheduler())
-                .observeOn(SchedulerProvider.getInstance().getMainScheduler());
+                .subscribeOn(schedulerProvider.getIOScheduler())
+                .observeOn(schedulerProvider.getMainScheduler());
     }
 
     private Event getEvent() {

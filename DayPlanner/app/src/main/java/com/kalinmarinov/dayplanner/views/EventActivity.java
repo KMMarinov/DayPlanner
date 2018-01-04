@@ -10,6 +10,7 @@ import android.widget.ListView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.kalinmarinov.dayplanner.R;
+import com.kalinmarinov.dayplanner.di.qualifiers.ViewModelProvided;
 import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.viewmodels.EventsViewModel;
 import com.kalinmarinov.dayplanner.views.adapters.EventItemListAdapter;
@@ -22,6 +23,7 @@ import java.util.List;
 public class EventActivity extends InjectableAppCompatActivity {
 
     @Inject
+    @ViewModelProvided
     EventsViewModel eventViewModel;
 
     private CompositeDisposable compositeDisposable;

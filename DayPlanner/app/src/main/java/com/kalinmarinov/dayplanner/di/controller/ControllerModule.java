@@ -3,12 +3,15 @@ package com.kalinmarinov.dayplanner.di.controller;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.v4.app.FragmentActivity;
 import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
+import com.kalinmarinov.dayplanner.di.qualifiers.ViewModelProvided;
+import com.kalinmarinov.dayplanner.providers.SchedulerProvider;
 import com.kalinmarinov.dayplanner.viewmodels.EventsViewModel;
 import com.kalinmarinov.dayplanner.viewmodels.EventsViewModelImpl;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModelImpl;
 import com.kalinmarinov.dayplanner.viewmodels.factories.EventsViewModelFactory;
 import com.kalinmarinov.dayplanner.viewmodels.factories.SingleEventViewModelFactory;
+import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
 
@@ -25,22 +28,37 @@ public class ControllerModule {
     }
 
     @Provides
-    public SingleEventViewModelFactory getSingleEventViewModelFactory(final EventDataModel eventDataModel) {
-        return new SingleEventViewModelFactory(eventDataModel);
+    SingleEventViewModel getSingleEventViewModel(final EventDataModel eventDataModel,
+                                                 final SchedulerProvider schedulerProvider) {
+        return new SingleEventViewModelImpl(eventDataModel, schedulerProvider);
     }
 
     @Provides
-    public EventsViewModelFactory getEventsViewModelFactory(final EventDataModel eventDataModel) {
-        return new EventsViewModelFactory(eventDataModel);
+    EventsViewModel getEventsViewModel(final EventDataModel eventDataModel,
+                                       final SchedulerProvider schedulerProvider) {
+        return new EventsViewModelImpl(eventDataModel, schedulerProvider);
     }
 
     @Provides
-    public SingleEventViewModel getSingleEventViewModel(final SingleEventViewModelFactory singleEventViewModelFactory) {
+    SingleEventViewModelFactory getSingleEventViewModelFactory(final Lazy<SingleEventViewModel> singleEventViewModel) {
+        return new SingleEventViewModelFactory(singleEventViewModel);
+    }
+
+    @Provides
+    EventsViewModelFactory getEventsViewModelFactory(final Lazy<EventsViewModel> eventsViewModel) {
+        return new EventsViewModelFactory(eventsViewModel);
+    }
+
+    @Provides
+    @ViewModelProvided
+    SingleEventViewModel getSingleEventViewModelProvided(
+            final SingleEventViewModelFactory singleEventViewModelFactory) {
         return ViewModelProviders.of(fragmentActivity, singleEventViewModelFactory).get(SingleEventViewModelImpl.class);
     }
 
     @Provides
-    public EventsViewModel getEventsViewModel(final EventsViewModelFactory eventsViewModelFactory) {
+    @ViewModelProvided
+    EventsViewModel getEventsViewModelProvided(final EventsViewModelFactory eventsViewModelFactory) {
         return ViewModelProviders.of(fragmentActivity, eventsViewModelFactory).get(EventsViewModelImpl.class);
     }
 }
