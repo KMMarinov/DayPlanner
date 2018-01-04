@@ -51,7 +51,7 @@ public class EventViewModelServiceImpl implements EventViewModelService {
         try {
             return DateUtils.parseDate(dateContainer.getDate(), DEFAULT_DATE_FORMAT);
         } catch (final ParseException e) {
-            throw new RuntimeException(onErrorMessage);
+            throw new IllegalArgumentException(onErrorMessage);
         }
     }
 }

@@ -50,14 +50,17 @@ dependencies {
     androidTestImplementation "android.arch.core:core-testing:$rootProject.roomVersion"
 
     // Lifecycle
-    implementation "android.arch.lifecycle:extensions:1.0.0"
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+    implementation 'android.arch.lifecycle:extensions:1.0.0'
+    annotationProcessor 'android.arch.lifecycle:compiler:1.0.0'
 
     // Dagger
-    compile group: 'com.google.dagger', name: 'dagger', version: '2.14.1'
-    annotationProcessor group: 'com.google.dagger', name: 'dagger-compiler', version: '2.14.1'
+    compile 'com.google.dagger:dagger:2.14.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
 
     // Butter Knife
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    // Other
+    compile 'commons-lang:commons-lang:2.6'
 }
