@@ -1,6 +1,6 @@
 package com.kalinmarinov.dayplanner.viewmodels;
 
-import com.kalinmarinov.dayplanner.models.Event;
+import com.kalinmarinov.dayplanner.views.containers.EventModelViewContainer;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
@@ -10,11 +10,11 @@ import io.reactivex.Single;
  */
 public interface SingleEventViewModel {
 
-    Single<Event> getEventSingle(final int eventId);
+    Single<EventModelViewContainer> getEventSingle(final int eventId);
 
-    Flowable<Event> getEvent(final int eventId);
+    Flowable<EventModelViewContainer> getEvent(final int eventId);
 
-    Completable saveEvent(final String name, final String description, final String startDate, final String endDate);
+    Completable saveEvent(final EventModelViewContainer eventModelViewContainer);
 
-    Completable deleteEvent(final Event event);
+    Completable deleteEvent();
 }

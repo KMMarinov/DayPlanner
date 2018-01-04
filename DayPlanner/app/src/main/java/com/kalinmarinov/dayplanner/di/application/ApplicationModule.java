@@ -2,6 +2,8 @@ package com.kalinmarinov.dayplanner.di.application;
 
 import android.app.Application;
 import android.content.Context;
+import com.kalinmarinov.dayplanner.providers.SchedulerProvider;
+import com.kalinmarinov.dayplanner.providers.SchedulerProviderImpl;
 import dagger.Module;
 import dagger.Provides;
 
@@ -20,5 +22,10 @@ public class ApplicationModule {
     @Provides
     Context getContext() {
         return application;
+    }
+
+    @Provides
+    SchedulerProvider getSchedulerProvider() {
+        return new SchedulerProviderImpl();
     }
 }

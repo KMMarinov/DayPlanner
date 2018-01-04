@@ -7,13 +7,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.kalinmarinov.dayplanner.R;
 import com.kalinmarinov.dayplanner.di.qualifiers.ViewModelProvided;
-import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.utils.Constants;
 import com.kalinmarinov.dayplanner.utils.android.ActivityUtils;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
 import com.kalinmarinov.dayplanner.views.base.InjectableAppCompatMenuActivity;
+import com.kalinmarinov.dayplanner.views.containers.EventModelViewContainer;
 import io.reactivex.disposables.CompositeDisposable;
 
 import javax.inject.Inject;
@@ -59,8 +60,7 @@ public class ShowEventActivity extends InjectableAppCompatMenuActivity {
         final int eventId = ActivityUtils.getExtra(getIntent(), Constants.EVENT_INTENT_ID_EXTRA_KEY);
         if (eventId != 0) {
             compositeDisposable.add(singleEventViewModel.getEvent(eventId)
-                    .subscribe(this::setupEvent, throwable -> Toast
-                            .makeText(getBaseContext(), throwable.getMessage(), Toast.LENGTH_LONG).show()));
+                    .subscribe(this::setupEvent, this::showError));
         }
     }
 
@@ -70,21 +70,24 @@ public class ShowEventActivity extends InjectableAppCompatMenuActivity {
         compositeDisposable.clear();
     }
 
-    private void setupEvent(final Event event) {
+    @OnClick(R.id.viewEventButtonDelete)
+    void onDeleteButtonClick() {
+        compositeDisposable.add(singleEventViewModel.deleteEvent()
+                .subscribe(this::finish, this::showError));
+    }
+
+    private void setupEvent(final EventModelViewContainer event) {
         nameTextView.setText(event.getName());
         descriptionTextView.setText(event.getDescription());
-        startDateTextView.setText(String.valueOf(event.getStartDate()));
-        endDateTextView.setText(String.valueOf(event.getEndDate()));
+        startDateTextView.setText(event.getStartDate().getDate());
+        endDateTextView.setText(event.getEndDate().getDate());
 
         editButton.setOnClickListener(v -> ActivityUtils
                 .startActivityWithExtra(getApplicationContext(), CreateEditEventActivity.class,
                         Constants.EVENT_INTENT_ID_EXTRA_KEY, event.getId()));
-        deleteButton.setOnClickListener(v -> onDeleteButtonClick(event));
     }
 
-    private void onDeleteButtonClick(final Event event) {
-        compositeDisposable.add(singleEventViewModel.deleteEvent(event)
-                .subscribe(this::finish, throwable -> Toast
-                        .makeText(getBaseContext(), throwable.getMessage(), Toast.LENGTH_LONG).show()));
+    private void showError(final Throwable throwable) {
+        Toast.makeText(getBaseContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();
     }
 }

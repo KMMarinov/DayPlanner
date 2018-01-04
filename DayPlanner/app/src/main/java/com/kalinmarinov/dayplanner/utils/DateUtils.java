@@ -9,17 +9,16 @@ import java.util.Date;
  */
 public final class DateUtils {
 
-    private static final String DEFAULT_DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
-
     private DateUtils() {
     }
 
-    public static Date parseDate(final String dateString) {
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-        try {
-            return simpleDateFormat.parse(dateString);
-        } catch (final ParseException e) {
-            throw new RuntimeException(e);
-        }
+    public static Date parseDate(final String dateString, final String dateFormat) throws ParseException {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        return simpleDateFormat.parse(dateString);
+    }
+
+    public static String formatDate(final Date date, final String dateFormat) {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        return simpleDateFormat.format(date);
     }
 }

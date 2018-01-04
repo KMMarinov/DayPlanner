@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import com.kalinmarinov.dayplanner.database.roomdatabases.EventsDatabase;
+import com.kalinmarinov.dayplanner.database.roomdatabases.ApplicationDatabase;
 import com.kalinmarinov.dayplanner.models.Event;
 import io.reactivex.Flowable;
 import io.reactivex.subscribers.TestSubscriber;
@@ -30,7 +30,7 @@ import static org.hamcrest.Matchers.notNullValue;
 public class EventDaoInstrumentationTest {
 
     private EventDao eventDao;
-    private EventsDatabase eventsDatabase;
+    private ApplicationDatabase applicationDatabase;
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -38,13 +38,14 @@ public class EventDaoInstrumentationTest {
     @Before
     public void createDatabase() {
         final Context context = InstrumentationRegistry.getTargetContext();
-        eventsDatabase = Room.inMemoryDatabaseBuilder(context, EventsDatabase.class).allowMainThreadQueries().build();
-        eventDao = eventsDatabase.getEventDao();
+        applicationDatabase = Room.inMemoryDatabaseBuilder(context, ApplicationDatabase.class).allowMainThreadQueries()
+                .build();
+        eventDao = applicationDatabase.getEventDao();
     }
 
     @After
     public void closeDatabase() {
-        eventsDatabase.close();
+        applicationDatabase.close();
     }
 
     @Test

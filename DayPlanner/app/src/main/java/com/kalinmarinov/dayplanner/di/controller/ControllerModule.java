@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
 import com.kalinmarinov.dayplanner.di.qualifiers.ViewModelProvided;
 import com.kalinmarinov.dayplanner.providers.SchedulerProvider;
+import com.kalinmarinov.dayplanner.services.EventViewModelService;
 import com.kalinmarinov.dayplanner.viewmodels.EventsViewModel;
 import com.kalinmarinov.dayplanner.viewmodels.EventsViewModelImpl;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
@@ -29,8 +30,9 @@ public class ControllerModule {
 
     @Provides
     SingleEventViewModel getSingleEventViewModel(final EventDataModel eventDataModel,
-                                                 final SchedulerProvider schedulerProvider) {
-        return new SingleEventViewModelImpl(eventDataModel, schedulerProvider);
+                                                 final SchedulerProvider schedulerProvider,
+                                                 final EventViewModelService eventViewModelService) {
+        return new SingleEventViewModelImpl(eventDataModel, schedulerProvider, eventViewModelService);
     }
 
     @Provides
