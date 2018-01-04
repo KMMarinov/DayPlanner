@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class EventViewModelServiceImpl implements EventViewModelService {
 
-    private static final String DEFAULT_DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
+    private static final String DEFAULT_DATE_FORMAT = "dd'D-'HH'H'";
 
     @Override
     public EventModelViewContainer convertToContainer(final Event event) {
@@ -42,9 +42,7 @@ public class EventViewModelServiceImpl implements EventViewModelService {
 
     private EventModelViewContainer.DateContainer formatDate(final Date date) {
         final String dateString = DateUtils.formatDate(date, DEFAULT_DATE_FORMAT);
-        final EventModelViewContainer.DateContainer dateContainer = new EventModelViewContainer.DateContainer(
-                dateString);
-        return dateContainer;
+        return new EventModelViewContainer.DateContainer(dateString);
     }
 
     private Date parseDate(final EventModelViewContainer.DateContainer dateContainer, final String onErrorMessage) {
