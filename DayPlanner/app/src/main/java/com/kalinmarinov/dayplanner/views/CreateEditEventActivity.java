@@ -1,6 +1,5 @@
 package com.kalinmarinov.dayplanner.views;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -12,15 +11,16 @@ import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.utils.Constants;
 import com.kalinmarinov.dayplanner.utils.android.ActivityUtils;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
-import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModelImpl;
-import com.kalinmarinov.dayplanner.viewmodels.factories.SingleEventViewModelFactory;
-import com.kalinmarinov.dayplanner.views.base.AppCompatMenuActivity;
+import com.kalinmarinov.dayplanner.views.base.InjectableAppCompatMenuActivity;
 import io.reactivex.disposables.Disposable;
 
-public class CreateEditEventActivity extends AppCompatMenuActivity {
+import javax.inject.Inject;
 
-    private SingleEventViewModel singleEventViewModel;
-    private SingleEventViewModelFactory singleEventViewModelFactory;
+public class CreateEditEventActivity extends InjectableAppCompatMenuActivity {
+
+    @Inject
+    SingleEventViewModel singleEventViewModel;
+
     private Disposable eventDisposable;
 
     // UI components
@@ -33,11 +33,8 @@ public class CreateEditEventActivity extends AppCompatMenuActivity {
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getControllerComponent().inject(this);
         initUI();
-
-        singleEventViewModelFactory = new SingleEventViewModelFactory();
-        singleEventViewModel = ViewModelProviders.of(this, singleEventViewModelFactory)
-                .get(SingleEventViewModelImpl.class);
         fetchEvent();
     }
 

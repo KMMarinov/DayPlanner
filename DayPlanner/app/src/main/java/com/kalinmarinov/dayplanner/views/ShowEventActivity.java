@@ -1,6 +1,5 @@
 package com.kalinmarinov.dayplanner.views;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Button;
@@ -11,15 +10,16 @@ import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.utils.Constants;
 import com.kalinmarinov.dayplanner.utils.android.ActivityUtils;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
-import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModelImpl;
-import com.kalinmarinov.dayplanner.viewmodels.factories.SingleEventViewModelFactory;
-import com.kalinmarinov.dayplanner.views.base.AppCompatMenuActivity;
+import com.kalinmarinov.dayplanner.views.base.InjectableAppCompatMenuActivity;
 import io.reactivex.disposables.CompositeDisposable;
 
-public class ShowEventActivity extends AppCompatMenuActivity {
+import javax.inject.Inject;
 
-    private SingleEventViewModel singleEventViewModel;
-    private SingleEventViewModelFactory singleEventViewModelFactory;
+public class ShowEventActivity extends InjectableAppCompatMenuActivity {
+
+    @Inject
+    SingleEventViewModel singleEventViewModel;
+
     private CompositeDisposable compositeDisposable;
 
     // UI components
@@ -33,17 +33,14 @@ public class ShowEventActivity extends AppCompatMenuActivity {
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getControllerComponent().inject(this);
         initUI();
-
-        singleEventViewModelFactory = new SingleEventViewModelFactory();
-        singleEventViewModel = ViewModelProviders.of(this, singleEventViewModelFactory)
-                .get(SingleEventViewModelImpl.class);
-        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        compositeDisposable = new CompositeDisposable();
         final int eventId = ActivityUtils.getExtra(getIntent(), Constants.EVENT_INTENT_ID_EXTRA_KEY);
         if (eventId != 0) {
             compositeDisposable.add(singleEventViewModel.getEvent(eventId)
