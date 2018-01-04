@@ -58,6 +58,16 @@ public class CreateEditEventActivity extends InjectableAppCompatMenuActivity {
         }
     }
 
+    @OnClick(R.id.createEditEventSaveButton)
+    void saveEvent(final View view) {
+        final String name = nameEditText.getText().toString().trim();
+        final String description = descriptionEditText.getText().toString().trim();
+        final String startDate = startDateEditText.getText().toString().trim();
+        final String endDate = endDateEditText.getText().toString().trim();
+        singleEventViewModel.saveEvent(name, description, startDate, endDate).subscribe(this::finish, throwable -> Toast
+                .makeText(getBaseContext(), throwable.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
     private void fetchEvent() {
         final int eventId = ActivityUtils.getExtra(getIntent(), Constants.EVENT_INTENT_ID_EXTRA_KEY);
         if (eventId != 0) {
@@ -71,15 +81,5 @@ public class CreateEditEventActivity extends InjectableAppCompatMenuActivity {
         descriptionEditText.setText(event.getDescription());
         startDateEditText.setText(String.valueOf(event.getStartDate()));
         endDateEditText.setText(String.valueOf(event.getEndDate()));
-    }
-
-    @OnClick(R.id.createEditEventSaveButton)
-    void saveEvent(final View view) {
-        final String name = nameEditText.getText().toString().trim();
-        final String description = descriptionEditText.getText().toString().trim();
-        final String startDate = startDateEditText.getText().toString().trim();
-        final String endDate = endDateEditText.getText().toString().trim();
-        singleEventViewModel.saveEvent(name, description, startDate, endDate).subscribe(this::finish, throwable -> Toast
-                .makeText(getBaseContext(), throwable.getMessage(), Toast.LENGTH_LONG).show());
     }
 }
