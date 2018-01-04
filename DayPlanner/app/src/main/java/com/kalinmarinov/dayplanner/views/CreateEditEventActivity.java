@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.kalinmarinov.dayplanner.R;
 import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.utils.Constants;
@@ -23,18 +26,27 @@ public class CreateEditEventActivity extends InjectableAppCompatMenuActivity {
 
     private Disposable eventDisposable;
 
-    // UI components
-    private Button saveButton;
-    private EditText nameEditText;
-    private EditText descriptionEditText;
-    private EditText startDateEditText;
-    private EditText endDateEditText;
+    @BindView(R.id.createEditEventSaveButton)
+    Button saveButton;
+
+    @BindView(R.id.createEditEventEditTextName)
+    EditText nameEditText;
+
+    @BindView(R.id.createEditEventEditTextDescription)
+    EditText descriptionEditText;
+
+    @BindView(R.id.createEditEventEditTextStartDate)
+    EditText startDateEditText;
+
+    @BindView(R.id.createEditEventEditTextEndDate)
+    EditText endDateEditText;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_create_edit_event);
         getControllerComponent().inject(this);
-        initUI();
+        ButterKnife.bind(this);
         fetchEvent();
     }
 
@@ -44,17 +56,6 @@ public class CreateEditEventActivity extends InjectableAppCompatMenuActivity {
         if (eventDisposable != null) {
             eventDisposable.dispose();
         }
-    }
-
-    private void initUI() {
-        setContentView(R.layout.activity_create_edit_event);
-
-        saveButton = findViewById(R.id.createEditEventSaveButton);
-        saveButton.setOnClickListener(this::saveEvent);
-        nameEditText = findViewById(R.id.createEditEventEditTextName);
-        descriptionEditText = findViewById(R.id.createEditEventEditTextDescription);
-        startDateEditText = findViewById(R.id.createEditEventEditTextStartDate);
-        endDateEditText = findViewById(R.id.createEditEventEditTextEndDate);
     }
 
     private void fetchEvent() {
@@ -72,7 +73,8 @@ public class CreateEditEventActivity extends InjectableAppCompatMenuActivity {
         endDateEditText.setText(String.valueOf(event.getEndDate()));
     }
 
-    private void saveEvent(final View view) {
+    @OnClick(R.id.createEditEventSaveButton)
+    void saveEvent(final View view) {
         final String name = nameEditText.getText().toString().trim();
         final String description = descriptionEditText.getText().toString().trim();
         final String startDate = startDateEditText.getText().toString().trim();

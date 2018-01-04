@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.kalinmarinov.dayplanner.R;
 import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.utils.Constants;
@@ -22,19 +24,30 @@ public class ShowEventActivity extends InjectableAppCompatMenuActivity {
 
     private CompositeDisposable compositeDisposable;
 
-    // UI components
-    private Button editButton;
-    private Button deleteButton;
-    private TextView nameTextView;
-    private TextView descriptionTextView;
-    private TextView startDateTextView;
-    private TextView endDateTextView;
+    @BindView(R.id.viewEventButtonEdit)
+    Button editButton;
+
+    @BindView(R.id.viewEventButtonDelete)
+    Button deleteButton;
+
+    @BindView(R.id.viewEventTextViewName)
+    TextView nameTextView;
+
+    @BindView(R.id.viewEventTextViewDescription)
+    TextView descriptionTextView;
+
+    @BindView(R.id.viewEventTextViewStartDate)
+    TextView startDateTextView;
+
+    @BindView(R.id.viewEventTextViewEndDate)
+    TextView endDateTextView;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_view_event);
         getControllerComponent().inject(this);
-        initUI();
+        ButterKnife.bind(this);
     }
 
     @Override
@@ -53,17 +66,6 @@ public class ShowEventActivity extends InjectableAppCompatMenuActivity {
     protected void onPause() {
         super.onPause();
         compositeDisposable.clear();
-    }
-
-    private void initUI() {
-        setContentView(R.layout.activity_view_event);
-
-        editButton = findViewById(R.id.viewEventButtonEdit);
-        deleteButton = findViewById(R.id.viewEventButtonDelete);
-        nameTextView = findViewById(R.id.viewEventTextViewName);
-        descriptionTextView = findViewById(R.id.viewEventTextViewDescription);
-        startDateTextView = findViewById(R.id.viewEventTextViewStartDate);
-        endDateTextView = findViewById(R.id.viewEventTextViewEndDate);
     }
 
     private void setupEvent(final Event event) {

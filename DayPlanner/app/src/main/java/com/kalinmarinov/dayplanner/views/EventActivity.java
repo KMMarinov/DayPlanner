@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.kalinmarinov.dayplanner.R;
 import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.viewmodels.EventsViewModel;
@@ -24,14 +26,15 @@ public class EventActivity extends InjectableAppCompatActivity {
 
     private CompositeDisposable compositeDisposable;
 
-    // UI components
-    private ListView eventsListView;
+    @BindView(R.id.eventsListView)
+    ListView eventsListView;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_list_events);
         getControllerComponent().inject(this);
-        initUI();
+        ButterKnife.bind(this);
     }
 
     @Override
@@ -62,11 +65,6 @@ public class EventActivity extends InjectableAppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void initUI() {
-        setContentView(R.layout.activity_list_events);
-        eventsListView = findViewById(R.id.eventsListView);
     }
 
     private void showEventName(final List<Event> events) {
