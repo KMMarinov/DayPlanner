@@ -5,7 +5,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
-import com.kalinmarinov.dayplanner.models.Event;
+import com.kalinmarinov.dayplanner.database.models.EventEntity;
 import io.reactivex.Flowable;
 
 import java.util.List;
@@ -17,14 +17,14 @@ import java.util.List;
 public interface EventDao {
 
     @Query("SELECT * FROM events")
-    Flowable<List<Event>> findAll();
+    Flowable<List<EventEntity>> findAll();
 
     @Query("SELECT * FROM events where id=:eventId")
-    Flowable<Event> findById(final int eventId);
+    Flowable<EventEntity> findById(final int eventId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long save(final Event event);
+    long save(final EventEntity event);
 
     @Delete
-    int delete(final Event event);
+    int delete(final EventEntity event);
 }

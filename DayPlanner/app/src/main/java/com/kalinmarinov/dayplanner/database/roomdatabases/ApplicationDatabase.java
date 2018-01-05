@@ -6,15 +6,15 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import com.kalinmarinov.dayplanner.database.dao.EventDao;
+import com.kalinmarinov.dayplanner.database.models.EventEntity;
 import com.kalinmarinov.dayplanner.database.roomdatabases.typeconverters.DateConverters;
-import com.kalinmarinov.dayplanner.models.Event;
 
 import static com.kalinmarinov.dayplanner.database.roomdatabases.ApplicationDatabase.DATABASE_VERSION;
 
 /**
  * Created by Kalin.Marinov on 26.12.2017.
  */
-@Database(entities = Event.class,
+@Database(entities = EventEntity.class,
         version = DATABASE_VERSION,
         exportSchema = false)
 @TypeConverters(DateConverters.class)

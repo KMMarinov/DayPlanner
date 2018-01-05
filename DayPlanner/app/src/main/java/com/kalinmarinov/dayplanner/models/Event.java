@@ -1,31 +1,16 @@
 package com.kalinmarinov.dayplanner.models;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-
 import java.util.Date;
 
 /**
  * Created by Kalin.Marinov on 26.12.2017.
  */
-@Entity(tableName = "events")
 public class Event {
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
     private int id;
-
-    @ColumnInfo(name = "name")
     private String name;
-
-    @ColumnInfo(name = "start_date")
     private Date startDate;
-
-    @ColumnInfo(name = "end_date")
     private Date endDate;
-
-    @ColumnInfo(name = "description")
     private String description;
 
     public int getId() {
