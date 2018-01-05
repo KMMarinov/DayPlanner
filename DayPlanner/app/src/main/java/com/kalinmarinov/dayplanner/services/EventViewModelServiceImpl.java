@@ -1,6 +1,7 @@
 package com.kalinmarinov.dayplanner.services;
 
 import com.kalinmarinov.dayplanner.models.Event;
+import com.kalinmarinov.dayplanner.models.builders.EventBuilder;
 import com.kalinmarinov.dayplanner.utils.DateUtils;
 import com.kalinmarinov.dayplanner.views.containers.EventModelViewContainer;
 
@@ -29,14 +30,15 @@ public class EventViewModelServiceImpl implements EventViewModelService {
 
     @Override
     public Event convertToModel(final EventModelViewContainer eventModelViewContainer) {
-        final Event event = new Event();
-        event.setId(eventModelViewContainer.getId());
-        event.setName(eventModelViewContainer.getName());
-        event.setDescription(eventModelViewContainer.getDescription());
         final Date startDate = parseDate(eventModelViewContainer.getStartDate(), "Invalid Start Date");
-        event.setStartDate(startDate);
         final Date endDate = parseDate(eventModelViewContainer.getEndDate(), "Invalid End Date");
-        event.setEndDate(endDate);
+        final Event event = new EventBuilder()
+                .setId(eventModelViewContainer.getId())
+                .setName(eventModelViewContainer.getName())
+                .setDescription(eventModelViewContainer.getDescription())
+                .setStartDate(startDate)
+                .setEndDate(endDate)
+                .build();
         return event;
     }
 

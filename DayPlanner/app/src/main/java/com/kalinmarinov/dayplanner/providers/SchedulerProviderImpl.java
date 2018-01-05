@@ -9,14 +9,17 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class SchedulerProviderImpl implements SchedulerProvider {
 
+    @Override
     public Scheduler getIOScheduler() {
         return Schedulers.io();
     }
 
+    @Override
     public Scheduler getMainScheduler() {
         return AndroidSchedulers.mainThread();
     }
 
+    @Override
     public Scheduler getComputationScheduler() {
         return Schedulers.computation();
     }

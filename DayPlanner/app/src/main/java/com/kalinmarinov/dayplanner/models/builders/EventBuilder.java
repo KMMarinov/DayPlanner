@@ -9,10 +9,16 @@ import java.util.Date;
  */
 public class EventBuilder {
 
+    private int id;
     private String name;
     private Date startDate;
     private Date endDate;
     private String description;
+
+    public EventBuilder setId(int id) {
+        this.id = id;
+        return this;
+    }
 
     public EventBuilder setName(String name) {
         this.name = name;
@@ -36,6 +42,7 @@ public class EventBuilder {
 
     public Event build() {
         final Event event = new Event();
+        event.setId(id);
         event.setName(name);
         event.setDescription(description);
         event.setStartDate(startDate);
