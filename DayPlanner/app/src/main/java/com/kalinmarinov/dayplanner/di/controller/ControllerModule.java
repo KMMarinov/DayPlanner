@@ -5,11 +5,15 @@ import android.support.v4.app.FragmentActivity;
 import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
 import com.kalinmarinov.dayplanner.di.qualifiers.ViewModelProvided;
 import com.kalinmarinov.dayplanner.providers.SchedulerProvider;
+import com.kalinmarinov.dayplanner.services.EventCalendarService;
 import com.kalinmarinov.dayplanner.services.EventViewModelService;
+import com.kalinmarinov.dayplanner.viewmodels.EventsCalendarViewModel;
+import com.kalinmarinov.dayplanner.viewmodels.EventsCalendarViewModelImpl;
 import com.kalinmarinov.dayplanner.viewmodels.EventsViewModel;
 import com.kalinmarinov.dayplanner.viewmodels.EventsViewModelImpl;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModelImpl;
+import com.kalinmarinov.dayplanner.viewmodels.factories.EventCalendarViewModelFactory;
 import com.kalinmarinov.dayplanner.viewmodels.factories.EventsViewModelFactory;
 import com.kalinmarinov.dayplanner.viewmodels.factories.SingleEventViewModelFactory;
 import dagger.Lazy;
@@ -42,6 +46,12 @@ public class ControllerModule {
     }
 
     @Provides
+    EventsCalendarViewModel getEventsCalendarViewModel(final SchedulerProvider schedulerProvider,
+                                                       final EventCalendarService eventCalendarService) {
+        return new EventsCalendarViewModelImpl(schedulerProvider, eventCalendarService);
+    }
+
+    @Provides
     SingleEventViewModelFactory getSingleEventViewModelFactory(final Lazy<SingleEventViewModel> singleEventViewModel) {
         return new SingleEventViewModelFactory(singleEventViewModel);
     }
@@ -49,6 +59,12 @@ public class ControllerModule {
     @Provides
     EventsViewModelFactory getEventsViewModelFactory(final Lazy<EventsViewModel> eventsViewModel) {
         return new EventsViewModelFactory(eventsViewModel);
+    }
+
+    @Provides
+    EventCalendarViewModelFactory getEventCalendarViewModelFactory(
+            final Lazy<EventsCalendarViewModel> eventsCalendarViewModel) {
+        return new EventCalendarViewModelFactory(eventsCalendarViewModel);
     }
 
     @Provides
@@ -62,5 +78,13 @@ public class ControllerModule {
     @ViewModelProvided
     EventsViewModel getEventsViewModelProvided(final EventsViewModelFactory eventsViewModelFactory) {
         return ViewModelProviders.of(fragmentActivity, eventsViewModelFactory).get(EventsViewModelImpl.class);
+    }
+
+    @Provides
+    @ViewModelProvided
+    EventsCalendarViewModel getEventsCalendarViewModelProvided(
+            final EventCalendarViewModelFactory eventCalendarViewModelFactory) {
+        return ViewModelProviders.of(fragmentActivity, eventCalendarViewModelFactory)
+                .get(EventsCalendarViewModelImpl.class);
     }
 }

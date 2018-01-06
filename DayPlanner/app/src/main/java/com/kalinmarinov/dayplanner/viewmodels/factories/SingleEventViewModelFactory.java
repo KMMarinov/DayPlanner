@@ -12,7 +12,7 @@ import dagger.Lazy;
  */
 public class SingleEventViewModelFactory implements ViewModelProvider.Factory {
 
-    private Lazy<SingleEventViewModel> singleEventViewModel;
+    private final Lazy<SingleEventViewModel> singleEventViewModel;
 
     public SingleEventViewModelFactory(final Lazy<SingleEventViewModel> singleEventViewModel) {
         this.singleEventViewModel = singleEventViewModel;

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical"
+              android:padding="@dimen/cell_padding">
+
+    <TextView
+            android:layout_gravity="center"
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/gridViewEventMonthCalendarItemDayWeekName"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/gridViewEventMonthCalendarItemEvent1"
+            android:textStyle="bold|italic" app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+            android:layout_gravity="center"
+            android:text="TextView"
+            android:layout_height="wrap_content" android:id="@+id/gridViewEventMonthCalendarItemEvent1"
+            app:layout_constraintTop_toBottomOf="@+id/gridViewEventMonthCalendarItemDayWeekName"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content" android:textSize="10sp"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+            android:layout_gravity="center"
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/gridViewEventMonthCalendarItemEvent2"
+            app:layout_constraintTop_toBottomOf="@+id/gridViewEventMonthCalendarItemEvent1"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="4dp" android:textSize="10sp"
+            app:layout_constraintEnd_toEndOf="parent"/>
+</LinearLayout>

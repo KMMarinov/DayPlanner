@@ -4,6 +4,7 @@ import com.kalinmarinov.dayplanner.di.controller.ControllerModule;
 import com.kalinmarinov.dayplanner.di.controller.ServiceModule;
 import com.kalinmarinov.dayplanner.views.CreateEditEventActivity;
 import com.kalinmarinov.dayplanner.views.EventActivity;
+import com.kalinmarinov.dayplanner.views.EventsCalendarActivity;
 import com.kalinmarinov.dayplanner.views.ShowEventActivity;
 import dagger.Component;
 
@@ -19,4 +20,6 @@ public interface ControllerComponent {
     void inject(final ShowEventActivity showEventActivity);
 
     void inject(final EventActivity createEditEventActivity);
+
+    void inject(final EventsCalendarActivity eventCalendarActivity);
 }

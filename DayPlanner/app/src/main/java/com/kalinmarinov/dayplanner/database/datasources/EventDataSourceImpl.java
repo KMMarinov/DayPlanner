@@ -6,6 +6,7 @@ import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.models.builders.EventBuilder;
 import io.reactivex.Flowable;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,12 +23,17 @@ public class EventDataSourceImpl implements EventDataSource {
 
     @Override
     public Flowable<List<Event>> findAll() {
-        return eventDao.findAll().map(this::toEvents);
+        return eventDao.findAll().map(EventDataSourceImpl::toEvents);
     }
 
     @Override
     public Flowable<Event> findById(final int eventId) {
-        return eventDao.findById(eventId).map(this::toEvent);
+        return eventDao.findById(eventId).map(EventDataSourceImpl::toEvent);
+    }
+
+    @Override
+    public Flowable<List<Event>> findByStartDateBetween(final Date start, final Date end) {
+        return eventDao.findByStartDateBetween(start, end).map(EventDataSourceImpl::toEvents);
     }
 
     @Override
@@ -42,11 +48,11 @@ public class EventDataSourceImpl implements EventDataSource {
         return eventDao.delete(eventEntity);
     }
 
-    private List<Event> toEvents(final List<EventEntity> eventEntities) {
-        return eventEntities.stream().map(this::toEvent).collect(Collectors.toList());
+    private static List<Event> toEvents(final List<EventEntity> eventEntities) {
+        return eventEntities.stream().map(EventDataSourceImpl::toEvent).collect(Collectors.toList());
     }
 
-    private Event toEvent(final EventEntity eventEntity) {
+    private static Event toEvent(final EventEntity eventEntity) {
         return new EventBuilder()
                 .setId(eventEntity.getId())
                 .setName(eventEntity.getName())
@@ -56,7 +62,7 @@ public class EventDataSourceImpl implements EventDataSource {
                 .build();
     }
 
-    private EventEntity toEventEntity(final Event event) {
+    private static EventEntity toEventEntity(final Event event) {
         return EventEntity.builder()
                 .setId(event.getId())
                 .setName(event.getName())

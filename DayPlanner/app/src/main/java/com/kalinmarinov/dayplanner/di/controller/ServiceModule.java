@@ -1,5 +1,8 @@
 package com.kalinmarinov.dayplanner.di.controller;
 
+import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
+import com.kalinmarinov.dayplanner.services.EventCalendarService;
+import com.kalinmarinov.dayplanner.services.EventCalendarServiceImpl;
 import com.kalinmarinov.dayplanner.services.EventViewModelService;
 import com.kalinmarinov.dayplanner.services.EventViewModelServiceImpl;
 import dagger.Module;
@@ -14,5 +17,10 @@ public class ServiceModule {
     @Provides
     EventViewModelService getEventViewModelService() {
         return new EventViewModelServiceImpl();
+    }
+
+    @Provides
+    EventCalendarService getEventCalendarService(final EventDataModel eventDataModel) {
+        return new EventCalendarServiceImpl(eventDataModel);
     }
 }

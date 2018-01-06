@@ -12,6 +12,7 @@
 
     <!-- list events menu -->
     <string name="list_events_menu_add_action">Add</string>
+    <string name="list_events_menu_calendar_button">CL</string>
 
     <!-- view event -->
     <string name="view_event_delete">Delete</string>

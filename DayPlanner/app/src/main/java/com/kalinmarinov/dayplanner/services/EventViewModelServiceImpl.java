@@ -42,12 +42,13 @@ public class EventViewModelServiceImpl implements EventViewModelService {
         return event;
     }
 
-    private EventModelViewContainer.DateContainer formatDate(final Date date) {
+    private static EventModelViewContainer.DateContainer formatDate(final Date date) {
         final String dateString = DateUtils.formatDate(date, DEFAULT_DATE_FORMAT);
         return new EventModelViewContainer.DateContainer(dateString);
     }
 
-    private Date parseDate(final EventModelViewContainer.DateContainer dateContainer, final String onErrorMessage) {
+    private static Date parseDate(final EventModelViewContainer.DateContainer dateContainer,
+                                  final String onErrorMessage) {
         try {
             return DateUtils.parseDate(dateContainer.getDate(), DEFAULT_DATE_FORMAT);
         } catch (final ParseException e) {

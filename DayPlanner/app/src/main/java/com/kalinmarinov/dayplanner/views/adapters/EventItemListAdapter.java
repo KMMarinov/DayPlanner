@@ -57,11 +57,11 @@ public class EventItemListAdapter extends ArrayAdapter<Event> {
 
         private final TextView titleTextView;
 
-        public ViewHolder(final TextView titleTextView) {
+        ViewHolder(final TextView titleTextView) {
             this.titleTextView = titleTextView;
         }
 
-        public TextView getTitleTextView() {
+        TextView getTitleTextView() {
             return titleTextView;
         }
     }

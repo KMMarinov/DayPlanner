@@ -65,6 +65,9 @@ public class EventActivity extends InjectableAppCompatActivity {
             case R.id.listEventsMenuAddButton:
                 startActivity(CreateEditEventActivity.class);
                 break;
+            case R.id.listEventsMenuCalendarButton:
+                startActivity(EventsCalendarActivity.class);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

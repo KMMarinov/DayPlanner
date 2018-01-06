@@ -1,10 +1,12 @@
 package com.kalinmarinov.dayplanner.datamodels;
 
 import com.kalinmarinov.dayplanner.database.datasources.EventDataSource;
+import com.kalinmarinov.dayplanner.database.models.EventEntity;
 import com.kalinmarinov.dayplanner.models.Event;
 import io.reactivex.Flowable;
 import org.apache.commons.lang.Validate;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +28,11 @@ public class EventDataModelImpl implements EventDataModel {
     @Override
     public Flowable<Event> findById(final int eventId) {
         return eventDataSource.findById(eventId);
+    }
+
+    @Override
+    public Flowable<List<Event>> findByStartDateBetween(final Date start, final Date end) {
+        return eventDataSource.findByStartDateBetween(start, end);
     }
 
     @Override
