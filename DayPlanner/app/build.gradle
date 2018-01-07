@@ -63,4 +63,5 @@ dependencies {
 
     // Other
     compile 'commons-lang:commons-lang:2.6'
+    compile 'org.apache.commons:commons-collections4:4.1'
 }

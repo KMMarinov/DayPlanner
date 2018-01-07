@@ -6,7 +6,9 @@ package com.kalinmarinov.dayplanner.utils;
 public final class Constants {
 
     // Used as a key for passing the event id
-    public static String EVENT_INTENT_ID_EXTRA_KEY = "eventIntentIdExtraKey";
+    public static final String EVENT_INTENT_ID_EXTRA_KEY = "eventIntentIdExtraKey";
+
+    public static final int DAYS_IN_WEEK = 7;
 
     private Constants() {
     }
