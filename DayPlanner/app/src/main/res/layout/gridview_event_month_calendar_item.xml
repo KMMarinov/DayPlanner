@@ -7,7 +7,6 @@
     <TextView
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/gridViewEventMonthCalendarItemDateNumber"
             app:layout_constraintTop_toTopOf="parent"
@@ -18,7 +17,6 @@
     <TextView
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/gridViewEventMonthCalendarItemDayWeekName"
             app:layout_constraintTop_toTopOf="parent"

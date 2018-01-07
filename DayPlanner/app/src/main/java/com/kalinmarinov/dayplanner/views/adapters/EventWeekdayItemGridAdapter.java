@@ -9,61 +9,49 @@ import com.kalinmarinov.dayplanner.utils.CalendarUtils;
 import com.kalinmarinov.dayplanner.utils.Constants;
 import com.kalinmarinov.dayplanner.views.containers.calendar.GridEventsCalendar;
 import com.kalinmarinov.dayplanner.views.containers.calendar.GridPosition;
-import com.kalinmarinov.dayplanner.views.containers.calendar.calculators.MonthGridPositionCalculator;
+import com.kalinmarinov.dayplanner.views.containers.calendar.GridPositionCalculator;
+import com.kalinmarinov.dayplanner.views.containers.calendar.calculators.WeekGridPositionCalculator;
 
 import java.util.List;
 
 /**
- * Created by Kalin.Marinov on 06.01.2018.
+ * Created by Kalin.Marinov on 07.01.2018.
  */
-public class EventMonthItemGridAdapter extends CalendarItemGridAdapter {
+public class EventWeekdayItemGridAdapter extends CalendarItemGridAdapter {
 
     private final GridEventsCalendar gridEventsCalendar;
 
-    public EventMonthItemGridAdapter(@NonNull final Activity context, @NonNull final List<Event> events) {
+    public EventWeekdayItemGridAdapter(@NonNull final Activity context, @NonNull final List<Event> events) {
         super(context, events, R.layout.gridview_event_month_calendar_item);
-        final MonthGridPositionCalculator monthGridPositionCalculator = new MonthGridPositionCalculator();
-        gridEventsCalendar = new GridEventsCalendar(events, monthGridPositionCalculator);
+        final GridPositionCalculator gridPositionCalculator = new WeekGridPositionCalculator();
+        gridEventsCalendar = new GridEventsCalendar(events, gridPositionCalculator);
     }
 
     @Override
     public int getCount() {
-        return CalendarUtils.currentMonthNumberWeeks() * Constants.DAYS_IN_WEEK;
+        return Constants.DAYS_IN_WEEK;
     }
 
     @Override
     public List<Event> getItem(final int position) {
-        final GridPosition gridPosition = getGridPosition(position);
+        final int weekday = getWeekday(position);
+        final GridPosition gridPosition = GridPosition.of(weekday, 1);
         return gridEventsCalendar.getEvents(gridPosition);
     }
 
     @Override
     protected void setHeaders(final TextView titleTextView, final TextView subtitleTextView, final int position) {
         final String shortWeekdayName = getShortWeekdayName(position);
-        final String dateNumber = getDateNumber(position);
         titleTextView.setText(shortWeekdayName);
-        subtitleTextView.setText(dateNumber);
     }
 
-    private static GridPosition getGridPosition(final int position) {
-        final int monthWeek = getMonthWeek(position);
-        final int weekday = getWeekday(position);
-        return GridPosition.of(weekday, monthWeek);
-    }
-
-    private static int getMonthWeek(final int position) {
-        return position / Constants.DAYS_IN_WEEK + 1;
+    @Override
+    public long getItemId(final int position) {
+        return 0;
     }
 
     private static int getWeekday(final int position) {
         return position % Constants.DAYS_IN_WEEK + 1;
-    }
-
-    private static String getDateNumber(final int position) {
-        final int weekday = getWeekday(position);
-        final int monthWeek = getMonthWeek(position);
-        final int dateOfMonth = CalendarUtils.getMonthDate(weekday, monthWeek);
-        return String.valueOf(dateOfMonth);
     }
 
     private static String getShortWeekdayName(final int position) {
