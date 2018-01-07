@@ -23,7 +23,7 @@ public interface EventDao {
     @Query("SELECT * FROM events where id=:eventId")
     Flowable<EventEntity> findById(final int eventId);
 
-    @Query("SELECT * FROM events where start_date BETWEEN :start AND :end")
+    @Query("SELECT * FROM events where start_date >= :start AND start_date < :end")
     Flowable<List<EventEntity>> findByStartDateBetween(final Date start, final Date end);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

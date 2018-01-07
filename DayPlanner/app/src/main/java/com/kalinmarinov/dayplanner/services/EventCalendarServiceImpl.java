@@ -5,10 +5,13 @@ import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.viewmodels.types.CalendarPeriodType;
 import io.reactivex.Flowable;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static java.time.temporal.ChronoField.DAY_OF_WEEK;
 
 /**
  * Created by Kalin.Marinov on 06.01.2018.
@@ -36,18 +39,26 @@ public class EventCalendarServiceImpl implements EventCalendarService {
 
     private Flowable<List<Event>> currentMonthEvents() {
         final LocalDate monthBeginLocalDate = LocalDate.now().withDayOfMonth(1);
-        final LocalDate monthEndLocalDate = LocalDate.now().plusMonths(1).withDayOfMonth(1).minusDays(1);
-        final Date monthBeginDate = convertToDate(monthBeginLocalDate);
-        final Date monthEndDate = convertToDate(monthEndLocalDate);
+        final LocalDate monthEndLocalDate = LocalDate.now().plusMonths(1).withDayOfMonth(1);
+        return getListEventsBetween(monthBeginLocalDate, monthEndLocalDate);
+    }
+
+    private Flowable<List<Event>> currentWeekEvents() {
+        final LocalDate monthBeginLocalDate = LocalDate.now().with(DAY_OF_WEEK, DayOfWeek.MONDAY.getValue());
+        final LocalDate monthEndLocalDate = LocalDate.now().with(DAY_OF_WEEK, DayOfWeek.SUNDAY.getValue()).plusDays(1);
+        return getListEventsBetween(monthBeginLocalDate, monthEndLocalDate);
+    }
+
+    private Flowable<List<Event>> currentDayEvents() {
+        final LocalDate monthBeginLocalDate = LocalDate.now();
+        final LocalDate monthEndLocalDate = LocalDate.now().plusDays(1);
+        return getListEventsBetween(monthBeginLocalDate, monthEndLocalDate);
+    }
+
+    private Flowable<List<Event>> getListEventsBetween(final LocalDate start, final LocalDate end) {
+        final Date monthBeginDate = convertToDate(start);
+        final Date monthEndDate = convertToDate(end);
         return eventDataModel.findByStartDateBetween(monthBeginDate, monthEndDate);
-    }
-
-    private static Flowable<List<Event>> currentWeekEvents() {
-        return null;
-    }
-
-    private static Flowable<List<Event>> currentDayEvents() {
-        return null;
     }
 
     private static Date convertToDate(final LocalDate localDate) {
