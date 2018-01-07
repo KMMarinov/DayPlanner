@@ -6,29 +6,44 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.kalinmarinov.dayplanner.R;
 import com.kalinmarinov.dayplanner.models.Event;
-import com.kalinmarinov.dayplanner.utils.android.ActivityUtils;
 import com.kalinmarinov.dayplanner.utils.Constants;
+import com.kalinmarinov.dayplanner.utils.android.ActivityUtils;
 import com.kalinmarinov.dayplanner.views.ShowEventActivity;
 
 import java.util.List;
 
+import static com.kalinmarinov.dayplanner.DayPlannerApplication.getContext;
+
 /**
  * Created by Kalin.Marinov on 30.12.2017.
  */
-public class EventItemListAdapter extends ArrayAdapter<Event> {
+public class EventItemListAdapter extends BaseAdapter {
 
     private final List<Event> events;
     private final Activity context;
 
-    public EventItemListAdapter(@NonNull final Activity context, final int resource,
-                                @NonNull final List<Event> events) {
-        super(context, resource, events);
+    public EventItemListAdapter(@NonNull final Activity context, @NonNull final List<Event> events) {
         this.events = events;
         this.context = context;
+    }
+
+    @Override
+    public int getCount() {
+        return events.size();
+    }
+
+    @Override
+    public Event getItem(final int position) {
+        return events.get(position);
+    }
+
+    @Override
+    public long getItemId(final int position) {
+        return events.get(position).getId();
     }
 
     @NonNull
@@ -44,11 +59,11 @@ public class EventItemListAdapter extends ArrayAdapter<Event> {
         }
 
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
-        final Event event = events.get(position);
+        final Event event = getItem(position);
         final String extraKey = Constants.EVENT_INTENT_ID_EXTRA_KEY;
         viewHolder.getTitleTextView().setText(event.getName());
         viewHolder.getTitleTextView().setOnClickListener(v -> ActivityUtils
-                .startActivityWithExtra(getContext(), ShowEventActivity.class, extraKey, event.getId()));
+                .startActivityWithExtra(getContext(), ShowEventActivity.class, extraKey, (int) getItemId(position)));
 
         return view;
     }

@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.kalinmarinov.dayplanner.R;
 import com.kalinmarinov.dayplanner.models.Event;
@@ -22,14 +22,12 @@ import java.util.List;
 /**
  * Created by Kalin.Marinov on 06.01.2018.
  */
-public class EventMonthItemGridAdapter extends ArrayAdapter<Event> {
+public class EventMonthItemGridAdapter extends BaseAdapter {
 
     private final GridEventsCalendar gridEventsCalendar;
     private final Activity context;
 
-    public EventMonthItemGridAdapter(@NonNull final Activity context, final int resource,
-                                     @NonNull final List<Event> events) {
-        super(context, resource, events);
+    public EventMonthItemGridAdapter(@NonNull final Activity context, @NonNull final List<Event> events) {
         gridEventsCalendar = new GridEventsCalendar(events);
         this.context = context;
     }
@@ -37,6 +35,17 @@ public class EventMonthItemGridAdapter extends ArrayAdapter<Event> {
     @Override
     public int getCount() {
         return CalendarUtils.currentMonthNumberWeeks() * Constants.DAYS_IN_WEEK;
+    }
+
+    @Override
+    public List<Event> getItem(final int position) {
+        final GridPosition gridPosition = getGridPosition(position);
+        return gridEventsCalendar.getEvents(gridPosition);
+    }
+
+    @Override
+    public long getItemId(final int position) {
+        return 0;
     }
 
     @NonNull
@@ -52,7 +61,6 @@ public class EventMonthItemGridAdapter extends ArrayAdapter<Event> {
 
     private void fillWithEvents(final int position, final View view) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
-        final GridPosition gridPosition = getGridPosition(position);
 
         // set weekday name and date number
         final String shortWeekdayName = getShortWeekdayName(position);
@@ -63,7 +71,7 @@ public class EventMonthItemGridAdapter extends ArrayAdapter<Event> {
         dayOfWeekTextView.setText(shortWeekdayName);
 
         // set events if any
-        final List<Event> events = gridEventsCalendar.getEvents(gridPosition);
+        final List<Event> events = getItem(position);
         if (!CollectionUtils.isEmpty(events)) {
             final List<TextView> eventNameViews = viewHolder.getEventNameViews();
             for (int i = 0; i < eventNameViews.size() && i < events.size(); i++) {

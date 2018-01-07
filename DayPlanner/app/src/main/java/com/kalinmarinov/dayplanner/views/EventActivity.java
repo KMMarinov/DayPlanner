@@ -73,8 +73,7 @@ public class EventActivity extends InjectableAppCompatActivity {
     }
 
     private void showEventName(final List<Event> events) {
-        final EventItemListAdapter arrayAdapter = new EventItemListAdapter(this, android.R.layout.simple_list_item_1,
-                events);
+        final EventItemListAdapter arrayAdapter = new EventItemListAdapter(this, events);
         eventsListView.setAdapter(arrayAdapter);
     }
 

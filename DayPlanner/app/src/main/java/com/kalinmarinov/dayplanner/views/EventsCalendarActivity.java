@@ -54,9 +54,7 @@ public class EventsCalendarActivity extends InjectableAppCompatActivity {
     }
 
     private void showEventName(final List<Event> events) {
-        final EventMonthItemGridAdapter arrayAdapter = new EventMonthItemGridAdapter(this,
-                android.R.layout.simple_gallery_item,
-                events);
+        final EventMonthItemGridAdapter arrayAdapter = new EventMonthItemGridAdapter(this, events);
         eventsCalendarGridView.setAdapter(arrayAdapter);
     }
 }
