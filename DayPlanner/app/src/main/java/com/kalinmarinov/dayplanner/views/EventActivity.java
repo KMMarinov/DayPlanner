@@ -15,7 +15,6 @@ import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.viewmodels.EventsViewModel;
 import com.kalinmarinov.dayplanner.views.adapters.EventItemListAdapter;
 import com.kalinmarinov.dayplanner.views.base.InjectableAppCompatActivity;
-import io.reactivex.disposables.CompositeDisposable;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -25,9 +24,7 @@ public class EventActivity extends InjectableAppCompatActivity {
     @Inject
     @ViewModelProvided
     EventsViewModel eventViewModel;
-
-    private CompositeDisposable compositeDisposable;
-
+   
     @BindView(R.id.eventsListView)
     ListView eventsListView;
 
@@ -42,14 +39,7 @@ public class EventActivity extends InjectableAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        compositeDisposable = new CompositeDisposable();
-        compositeDisposable.add(eventViewModel.getEvents().subscribe(this::showEventName));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        compositeDisposable.clear();
+        addDisposable(eventViewModel.getEvents().subscribe(this::showEventName));
     }
 
     @Override

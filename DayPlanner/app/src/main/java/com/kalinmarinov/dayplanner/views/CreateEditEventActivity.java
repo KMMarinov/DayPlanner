@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -16,7 +15,6 @@ import com.kalinmarinov.dayplanner.utils.android.ActivityUtils;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
 import com.kalinmarinov.dayplanner.views.base.InjectableAppCompatMenuActivity;
 import com.kalinmarinov.dayplanner.views.containers.EventModelViewContainer;
-import io.reactivex.disposables.Disposable;
 
 import javax.inject.Inject;
 
@@ -25,8 +23,6 @@ public class CreateEditEventActivity extends InjectableAppCompatMenuActivity {
     @Inject
     @ViewModelProvided
     SingleEventViewModel singleEventViewModel;
-
-    private Disposable eventDisposable;
 
     @BindView(R.id.createEditEventSaveButton)
     Button saveButton;
@@ -52,25 +48,19 @@ public class CreateEditEventActivity extends InjectableAppCompatMenuActivity {
         fetchEvent();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (eventDisposable != null) {
-            eventDisposable.dispose();
-        }
-    }
-
     @OnClick(R.id.createEditEventSaveButton)
     void saveEvent(final View view) {
-        singleEventViewModel.saveEvent(getFormInput())
+        singleEventViewModel
+                .saveEvent(getFormInput())
                 .subscribe(this::finish, this::showError);
     }
 
     private void fetchEvent() {
         final int eventId = ActivityUtils.getExtra(getIntent(), Constants.EVENT_INTENT_ID_EXTRA_KEY);
         if (eventId != 0) {
-            eventDisposable = singleEventViewModel.getEventSingle(eventId)
-                    .subscribe(this::showEvent, this::showError);
+            addDisposable(singleEventViewModel
+                    .getEventSingle(eventId)
+                    .subscribe(this::showEvent, this::showError));
         }
     }
 
@@ -79,10 +69,6 @@ public class CreateEditEventActivity extends InjectableAppCompatMenuActivity {
         descriptionEditText.setText(event.getDescription());
         startDateEditText.setText(event.getStartDate().getDate());
         endDateEditText.setText(event.getEndDate().getDate());
-    }
-
-    private void showError(final Throwable throwable) {
-        Toast.makeText(getBaseContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     private EventModelViewContainer getFormInput() {

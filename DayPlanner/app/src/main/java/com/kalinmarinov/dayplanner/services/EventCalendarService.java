@@ -1,15 +1,19 @@
 package com.kalinmarinov.dayplanner.services;
 
-import com.kalinmarinov.dayplanner.models.Event;
-import com.kalinmarinov.dayplanner.viewmodels.types.CalendarPeriodType;
+import com.kalinmarinov.dayplanner.utils.models.Period;
+import com.kalinmarinov.dayplanner.views.containers.EventCalendarContainer;
 import io.reactivex.Flowable;
-
-import java.util.List;
 
 /**
  * Created by Kalin.Marinov on 06.01.2018.
  */
 public interface EventCalendarService {
 
-    Flowable<List<Event>> getEvents(final CalendarPeriodType calendarPeriodType);
+    Flowable<EventCalendarContainer> currentMonthEvents();
+
+    Flowable<EventCalendarContainer> weekOfCurrentMonthEvents(final int week);
+
+    Flowable<EventCalendarContainer> dayOfCurrentMonthEvents(final int day);
+
+    Flowable<EventCalendarContainer> daysInPeriodMonthEvents(final Period period);
 }

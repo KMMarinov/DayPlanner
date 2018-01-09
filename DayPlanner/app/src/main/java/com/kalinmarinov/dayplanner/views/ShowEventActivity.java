@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -15,7 +14,6 @@ import com.kalinmarinov.dayplanner.utils.android.ActivityUtils;
 import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModel;
 import com.kalinmarinov.dayplanner.views.base.InjectableAppCompatMenuActivity;
 import com.kalinmarinov.dayplanner.views.containers.EventModelViewContainer;
-import io.reactivex.disposables.CompositeDisposable;
 
 import javax.inject.Inject;
 
@@ -24,8 +22,6 @@ public class ShowEventActivity extends InjectableAppCompatMenuActivity {
     @Inject
     @ViewModelProvided
     SingleEventViewModel singleEventViewModel;
-
-    private CompositeDisposable compositeDisposable;
 
     @BindView(R.id.viewEventButtonEdit)
     Button editButton;
@@ -56,23 +52,18 @@ public class ShowEventActivity extends InjectableAppCompatMenuActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        compositeDisposable = new CompositeDisposable();
         final int eventId = ActivityUtils.getExtra(getIntent(), Constants.EVENT_INTENT_ID_EXTRA_KEY);
         if (eventId != 0) {
-            compositeDisposable.add(singleEventViewModel.getEvent(eventId)
+            addDisposable(singleEventViewModel
+                    .getEvent(eventId)
                     .subscribe(this::setupEvent, this::showError));
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        compositeDisposable.clear();
-    }
-
     @OnClick(R.id.viewEventButtonDelete)
     void onDeleteButtonClick() {
-        compositeDisposable.add(singleEventViewModel.deleteEvent()
+        addDisposable(singleEventViewModel
+                .deleteEvent()
                 .subscribe(this::finish, this::showError));
     }
 
@@ -85,9 +76,5 @@ public class ShowEventActivity extends InjectableAppCompatMenuActivity {
         editButton.setOnClickListener(v -> ActivityUtils
                 .startActivityWithExtra(getApplicationContext(), CreateEditEventActivity.class,
                         Constants.EVENT_INTENT_ID_EXTRA_KEY, event.getId()));
-    }
-
-    private void showError(final Throwable throwable) {
-        Toast.makeText(getBaseContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();
     }
 }

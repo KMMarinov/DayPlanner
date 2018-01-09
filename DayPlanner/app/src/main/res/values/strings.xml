@@ -10,6 +10,9 @@
     <!-- create and edit event -->
     <string name="create_edit_event_save_button">Save</string>
 
+    <!-- event calendar -->
+    <string name="events_calendar_set_button">Set</string>
+
     <!-- list events menu -->
     <string name="list_events_menu_add_action">Add</string>
     <string name="list_events_menu_calendar_button">CL</string>

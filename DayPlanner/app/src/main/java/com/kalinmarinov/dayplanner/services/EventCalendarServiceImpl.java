@@ -1,17 +1,14 @@
 package com.kalinmarinov.dayplanner.services;
 
 import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
-import com.kalinmarinov.dayplanner.models.Event;
-import com.kalinmarinov.dayplanner.viewmodels.types.CalendarPeriodType;
+import com.kalinmarinov.dayplanner.utils.models.Period;
+import com.kalinmarinov.dayplanner.types.CalendarPeriodType;
+import com.kalinmarinov.dayplanner.views.containers.EventCalendarContainer;
 import io.reactivex.Flowable;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-
-import static java.time.temporal.ChronoField.DAY_OF_WEEK;
 
 /**
  * Created by Kalin.Marinov on 06.01.2018.
@@ -25,40 +22,64 @@ public class EventCalendarServiceImpl implements EventCalendarService {
     }
 
     @Override
-    public Flowable<List<Event>> getEvents(final CalendarPeriodType calendarPeriodType) {
-        switch (calendarPeriodType) {
-            case MONTH:
-                return currentMonthEvents();
-            case WEEK:
-                return currentWeekEvents();
-            case DAY:
-                return currentDayEvents();
+    public Flowable<EventCalendarContainer> currentMonthEvents() {
+        final LocalDate monthBeginLocalDate = LocalDate.MIN.withDayOfMonth(1);
+        final LocalDate monthEndLocalDate = LocalDate.MIN.plusMonths(1).withDayOfMonth(1);
+        return getListEventsBetween(monthBeginLocalDate, monthEndLocalDate, CalendarPeriodType.MONTH);
+    }
+
+    @Override
+    public Flowable<EventCalendarContainer> weekOfCurrentMonthEvents(final int week) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.WEEK_OF_MONTH, week);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        final LocalDate weekBeginLocalDate = LocalDate.MIN.withDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
+        final LocalDate weekEndLocalDate = weekBeginLocalDate.plusWeeks(1);
+        return getListEventsBetween(weekBeginLocalDate, weekEndLocalDate, CalendarPeriodType.WEEK);
+    }
+
+    @Override
+    public Flowable<EventCalendarContainer> dayOfCurrentMonthEvents(final int day) {
+        final LocalDate beginLocalDate = LocalDate.MIN.withDayOfMonth(day);
+        final LocalDate endLocalDate = beginLocalDate.plusDays(1);
+        return getListEventsBetween(beginLocalDate, endLocalDate, CalendarPeriodType.DAY);
+    }
+
+    @Override
+    public Flowable<EventCalendarContainer> daysInPeriodMonthEvents(final Period period) {
+        final int startDay = period.getStart();
+        final int endDay = period.getEnd();
+
+        if (startDay > endDay) {
+            throw new IllegalArgumentException("Start date must be earlier than end date.");
         }
-        throw new IllegalArgumentException("Unsupported calendar type");
+
+        // Check if events are on a same day - use day calendar
+        if (startDay == endDay) {
+            return dayOfCurrentMonthEvents(startDay);
+        }
+
+        // Check if events are on a same week - use week calendar
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.set(Calendar.DAY_OF_MONTH, startDay);
+        final int startDayWeek = calendar.get(Calendar.WEEK_OF_MONTH);
+        calendar.set(Calendar.DAY_OF_MONTH, endDay);
+        final int endDayWeek = calendar.get(Calendar.WEEK_OF_MONTH);
+        if (startDayWeek == endDayWeek) {
+            return weekOfCurrentMonthEvents(startDayWeek);
+        }
+
+        // If selected days are contained in more than one week, show month calendar
+        return currentMonthEvents();
     }
 
-    private Flowable<List<Event>> currentMonthEvents() {
-        final LocalDate monthBeginLocalDate = LocalDate.now().withDayOfMonth(1);
-        final LocalDate monthEndLocalDate = LocalDate.now().plusMonths(1).withDayOfMonth(1);
-        return getListEventsBetween(monthBeginLocalDate, monthEndLocalDate);
-    }
-
-    private Flowable<List<Event>> currentWeekEvents() {
-        final LocalDate monthBeginLocalDate = LocalDate.now().with(DAY_OF_WEEK, DayOfWeek.MONDAY.getValue());
-        final LocalDate monthEndLocalDate = LocalDate.now().with(DAY_OF_WEEK, DayOfWeek.SUNDAY.getValue()).plusDays(1);
-        return getListEventsBetween(monthBeginLocalDate, monthEndLocalDate);
-    }
-
-    private Flowable<List<Event>> currentDayEvents() {
-        final LocalDate monthBeginLocalDate = LocalDate.now();
-        final LocalDate monthEndLocalDate = LocalDate.now().plusDays(1);
-        return getListEventsBetween(monthBeginLocalDate, monthEndLocalDate);
-    }
-
-    private Flowable<List<Event>> getListEventsBetween(final LocalDate start, final LocalDate end) {
-        final Date monthBeginDate = convertToDate(start);
-        final Date monthEndDate = convertToDate(end);
-        return eventDataModel.findByStartDateBetween(monthBeginDate, monthEndDate);
+    private Flowable<EventCalendarContainer> getListEventsBetween(final LocalDate start, final LocalDate end,
+                                                                  final CalendarPeriodType calendarPeriodType) {
+        final Date beginDate = convertToDate(start);
+        final Date endDate = convertToDate(end);
+        return eventDataModel.findByStartDateBetween(beginDate, endDate)
+                .map(events -> new EventCalendarContainer(calendarPeriodType, events));
     }
 
     private static Date convertToDate(final LocalDate localDate) {

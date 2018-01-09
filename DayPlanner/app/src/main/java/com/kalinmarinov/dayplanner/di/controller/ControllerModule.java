@@ -16,6 +16,9 @@ import com.kalinmarinov.dayplanner.viewmodels.SingleEventViewModelImpl;
 import com.kalinmarinov.dayplanner.viewmodels.factories.EventCalendarViewModelFactory;
 import com.kalinmarinov.dayplanner.viewmodels.factories.EventsViewModelFactory;
 import com.kalinmarinov.dayplanner.viewmodels.factories.SingleEventViewModelFactory;
+import com.kalinmarinov.dayplanner.viewmodels.parsers.EventsCalendarViewModelParser;
+import com.kalinmarinov.dayplanner.views.presenters.EventsCalendarViewPresenter;
+import com.kalinmarinov.dayplanner.views.presenters.EventsCalendarViewPresenterImpl;
 import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
@@ -47,8 +50,9 @@ public class ControllerModule {
 
     @Provides
     EventsCalendarViewModel getEventsCalendarViewModel(final SchedulerProvider schedulerProvider,
-                                                       final EventCalendarService eventCalendarService) {
-        return new EventsCalendarViewModelImpl(schedulerProvider, eventCalendarService);
+                                                       final EventCalendarService eventCalendarService,
+                                                       final EventsCalendarViewModelParser eventsCalendarViewModelParser) {
+        return new EventsCalendarViewModelImpl(schedulerProvider, eventCalendarService, eventsCalendarViewModelParser);
     }
 
     @Provides
@@ -86,5 +90,10 @@ public class ControllerModule {
             final EventCalendarViewModelFactory eventCalendarViewModelFactory) {
         return ViewModelProviders.of(fragmentActivity, eventCalendarViewModelFactory)
                 .get(EventsCalendarViewModelImpl.class);
+    }
+
+    @Provides
+    EventsCalendarViewPresenter getEventCalendarViewPresenter() {
+        return new EventsCalendarViewPresenterImpl(fragmentActivity);
     }
 }
