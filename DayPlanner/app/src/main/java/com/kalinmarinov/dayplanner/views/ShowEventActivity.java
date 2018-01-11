@@ -1,7 +1,9 @@
 package com.kalinmarinov.dayplanner.views;
 
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Button;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -52,6 +54,15 @@ public class ShowEventActivity extends InjectableAppCompatMenuActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_audiotrack_dark)
+                .setContentTitle("My notification")
+                .setContentText("Hello World!");
+        int mNotificationId = 001;
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // Builds the notification and issues it.
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
         final int eventId = ActivityUtils.getExtra(getIntent(), Constants.EVENT_INTENT_ID_EXTRA_KEY);
         if (eventId != 0) {
             addDisposable(singleEventViewModel

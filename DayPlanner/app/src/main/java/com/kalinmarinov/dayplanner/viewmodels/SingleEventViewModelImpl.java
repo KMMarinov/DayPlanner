@@ -6,6 +6,7 @@ import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
 import com.kalinmarinov.dayplanner.models.Event;
 import com.kalinmarinov.dayplanner.providers.SchedulerProvider;
 import com.kalinmarinov.dayplanner.services.EventViewModelService;
+import com.kalinmarinov.dayplanner.services.JobSchedulerService;
 import com.kalinmarinov.dayplanner.views.containers.EventModelViewContainer;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
@@ -19,14 +20,17 @@ public class SingleEventViewModelImpl extends ViewModel implements SingleEventVi
     private final EventDataModel eventDataModel;
     private final SchedulerProvider schedulerProvider;
     private final EventViewModelService eventViewModelService;
+    private final JobSchedulerService jobSchedulerService;
 
     private Event event;
 
-    public SingleEventViewModelImpl(final EventDataModel eventDataModel, final SchedulerProvider schedulerProvider,
+    public SingleEventViewModelImpl(final JobSchedulerService jobSchedulerService, final EventDataModel eventDataModel,
+                                    final SchedulerProvider schedulerProvider,
                                     final EventViewModelService eventViewModelService) {
         this.eventDataModel = eventDataModel;
         this.schedulerProvider = schedulerProvider;
         this.eventViewModelService = eventViewModelService;
+        this.jobSchedulerService = jobSchedulerService;
     }
 
     @Override
@@ -62,6 +66,7 @@ public class SingleEventViewModelImpl extends ViewModel implements SingleEventVi
 
     @NonNull
     private EventModelViewContainer cacheAndConvert(final Event event) {
+        jobSchedulerService.scheduleEventNotification(event);
         this.event = event;
         return eventViewModelService.convertToContainer(event);
     }

@@ -5,8 +5,10 @@ import android.support.v4.app.FragmentActivity;
 import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
 import com.kalinmarinov.dayplanner.di.qualifiers.ViewModelProvided;
 import com.kalinmarinov.dayplanner.providers.SchedulerProvider;
+import com.kalinmarinov.dayplanner.scheduling.android.factories.JobComponentFactory;
 import com.kalinmarinov.dayplanner.services.EventCalendarService;
 import com.kalinmarinov.dayplanner.services.EventViewModelService;
+import com.kalinmarinov.dayplanner.services.JobSchedulerService;
 import com.kalinmarinov.dayplanner.viewmodels.EventsCalendarViewModel;
 import com.kalinmarinov.dayplanner.viewmodels.EventsCalendarViewModelImpl;
 import com.kalinmarinov.dayplanner.viewmodels.EventsViewModel;
@@ -36,10 +38,12 @@ public class ControllerModule {
     }
 
     @Provides
-    SingleEventViewModel getSingleEventViewModel(final EventDataModel eventDataModel,
+    SingleEventViewModel getSingleEventViewModel(final JobSchedulerService jobSchedulerService,
+                                                 final EventDataModel eventDataModel,
                                                  final SchedulerProvider schedulerProvider,
                                                  final EventViewModelService eventViewModelService) {
-        return new SingleEventViewModelImpl(eventDataModel, schedulerProvider, eventViewModelService);
+        return new SingleEventViewModelImpl(jobSchedulerService, eventDataModel, schedulerProvider,
+                eventViewModelService);
     }
 
     @Provides
@@ -95,5 +99,10 @@ public class ControllerModule {
     @Provides
     EventsCalendarViewPresenter getEventCalendarViewPresenter() {
         return new EventsCalendarViewPresenterImpl(fragmentActivity);
+    }
+
+    @Provides
+    JobComponentFactory getJobComponentFactory() {
+        return new JobComponentFactory(fragmentActivity);
     }
 }

@@ -7,6 +7,7 @@ import com.kalinmarinov.dayplanner.di.ApplicationComponent;
 import com.kalinmarinov.dayplanner.di.ControllerComponent;
 import com.kalinmarinov.dayplanner.di.DaggerControllerComponent;
 import com.kalinmarinov.dayplanner.di.controller.ControllerModule;
+import com.kalinmarinov.dayplanner.di.controller.ServiceModule;
 
 /**
  * Created by Kalin.Marinov on 04.01.2018.
@@ -25,6 +26,7 @@ public class InjectableAppCompatActivity extends BaseAppCompatActivity {
                 .builder()
                 .applicationComponent(applicationComponent)
                 .controllerModule(new ControllerModule(this))
+                .serviceModule(new ServiceModule(this))
                 .build();
     }
 

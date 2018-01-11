@@ -23,6 +23,9 @@
         </activity>
         <activity android:name=".views.EventsCalendarActivity">
         </activity>
+
+        <service android:name=".scheduling.android.services.NotificationJobService"
+                 android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
 </manifest>
