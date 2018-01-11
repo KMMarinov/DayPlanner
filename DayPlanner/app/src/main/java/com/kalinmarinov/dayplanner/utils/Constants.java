@@ -8,8 +8,10 @@ public final class Constants {
     // Used as a key for passing the event id
     public static final String EVENT_INTENT_ID_EXTRA_KEY = "eventIntentIdExtraKey";
 
+    // Time constants
     public static final int DAYS_IN_WEEK = 7;
     public static final int HOURS_IN_DAY = 24;
+    public static final int DAY_STARTING_HOUR = 0;
 
     public static final String EMPTY_STRING = "";
 

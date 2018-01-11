@@ -22,13 +22,17 @@ public class GridEventsCalendar {
     }
 
     public void addEvent(final Event event) {
-        final GridPosition gridPosition = gridPositionCalculator.calculate(event);
-        final List<Event> events = gridEvents.computeIfAbsent(gridPosition, key -> new LinkedList<>());
-        events.add(event);
+        final List<GridPosition> gridPositions = gridPositionCalculator.calculate(event);
+        gridPositions.forEach(gridPosition -> addEvent(gridPosition, event));
     }
 
     public List<Event> getEvents(final GridPosition gridPosition) {
         final List<Event> events = gridEvents.get(gridPosition);
         return events == null ? null : new LinkedList<>(events);
+    }
+
+    private void addEvent(final GridPosition gridPosition, final Event event) {
+        final List<Event> events = gridEvents.computeIfAbsent(gridPosition, key -> new LinkedList<>());
+        events.add(event);
     }
 }

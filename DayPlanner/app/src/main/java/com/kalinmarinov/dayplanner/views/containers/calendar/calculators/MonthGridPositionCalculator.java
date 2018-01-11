@@ -1,14 +1,14 @@
 package com.kalinmarinov.dayplanner.views.containers.calendar.calculators;
 
 import com.kalinmarinov.dayplanner.models.Event;
+import com.kalinmarinov.dayplanner.utils.CalendarUtils;
 import com.kalinmarinov.dayplanner.utils.Constants;
 import com.kalinmarinov.dayplanner.views.containers.calendar.GridPosition;
 import com.kalinmarinov.dayplanner.views.containers.calendar.GridPositionCalculator;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Kalin.Marinov on 07.01.2018.
@@ -16,20 +16,20 @@ import java.util.Locale;
 public class MonthGridPositionCalculator implements GridPositionCalculator {
 
     @Override
-    public GridPosition calculate(final Event event) {
-        final Date startDate = event.getStartDate();
-        final Calendar calendarStartDate = Calendar.getInstance();
-        calendarStartDate.setTime(startDate);
-        final Calendar currentMonthCalendar = new GregorianCalendar(Locale.FRANCE);
-        currentMonthCalendar.set(Calendar.DATE, calendarStartDate.get(Calendar.DATE));
-        currentMonthCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-        final int weekOfMonth = currentMonthCalendar.get(Calendar.WEEK_OF_MONTH);
-        final int dayOfWeek = calculateDayOfWeek(currentMonthCalendar);
-        return GridPosition.of(dayOfWeek, weekOfMonth);
-    }
+    public List<GridPosition> calculate(final Event event) {
+        final Calendar dateCalendar = CalendarUtils.calendarFromDate(event.getStartDate());
+        final Calendar endDateCalendar = CalendarUtils.calendarFromDate(event.getEndDate());
+        dateCalendar.set(Calendar.HOUR_OF_DAY, Constants.DAY_STARTING_HOUR);
 
-    private static int calculateDayOfWeek(final Calendar currentMonthCalendar) {
-        return (Constants.DAYS_IN_WEEK + currentMonthCalendar.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY - 1)
-                % Constants.DAYS_IN_WEEK + 1;
+        final List<GridPosition> gridPositions = new LinkedList<>();
+        while (!dateCalendar.after(endDateCalendar)) {
+            final int dayOfMonth = dateCalendar.get(Calendar.DAY_OF_MONTH);
+            final int dayOfWeek = CalendarUtils.getCurrentMonthDayOfWeek(dayOfMonth);
+            final int weekOfMonth = CalendarUtils.getCurrentMonthWeekOfMonth(dayOfMonth);
+            final GridPosition gridPosition = GridPosition.of(dayOfWeek, weekOfMonth);
+            gridPositions.add(gridPosition);
+            dateCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        return gridPositions;
     }
 }
