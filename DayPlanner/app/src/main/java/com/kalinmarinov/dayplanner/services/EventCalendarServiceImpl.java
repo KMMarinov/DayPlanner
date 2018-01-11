@@ -1,6 +1,7 @@
 package com.kalinmarinov.dayplanner.services;
 
 import com.kalinmarinov.dayplanner.datamodels.EventDataModel;
+import com.kalinmarinov.dayplanner.utils.CalendarUtils;
 import com.kalinmarinov.dayplanner.utils.models.Period;
 import com.kalinmarinov.dayplanner.types.CalendarPeriodType;
 import com.kalinmarinov.dayplanner.views.containers.EventCalendarContainer;
@@ -47,31 +48,27 @@ public class EventCalendarServiceImpl implements EventCalendarService {
 
     @Override
     public Flowable<EventCalendarContainer> daysInPeriodMonthEvents(final Period period) {
-        final int startDay = period.getStart();
-        final int endDay = period.getEnd();
+        final LocalDate startDate = LocalDate.MIN.withDayOfMonth(period.getStart());
+        final LocalDate endDate = LocalDate.MIN.withDayOfMonth(period.getEnd());
 
-        if (startDay > endDay) {
+        if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("Start date must be earlier than end date.");
         }
 
         // Check if events are on a same day - use day calendar
-        if (startDay == endDay) {
-            return dayOfCurrentMonthEvents(startDay);
+        if (startDate.isEqual(endDate)) {
+            return getListEventsBetween(startDate, endDate.plusDays(1), CalendarPeriodType.DAY);
         }
 
         // Check if events are on a same week - use week calendar
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setFirstDayOfWeek(Calendar.MONDAY);
-        calendar.set(Calendar.DAY_OF_MONTH, startDay);
-        final int startDayWeek = calendar.get(Calendar.WEEK_OF_MONTH);
-        calendar.set(Calendar.DAY_OF_MONTH, endDay);
-        final int endDayWeek = calendar.get(Calendar.WEEK_OF_MONTH);
+        final int startDayWeek = CalendarUtils.getCurrentMonthWeekOfMonth(startDate.getDayOfMonth());
+        final int endDayWeek = CalendarUtils.getCurrentMonthWeekOfMonth(endDate.getDayOfMonth());
         if (startDayWeek == endDayWeek) {
-            return weekOfCurrentMonthEvents(startDayWeek);
+            return getListEventsBetween(startDate, endDate.plusDays(1), CalendarPeriodType.WEEK);
         }
 
         // If selected days are contained in more than one week, show month calendar
-        return currentMonthEvents();
+        return getListEventsBetween(startDate, endDate.plusDays(1), CalendarPeriodType.MONTH);
     }
 
     private Flowable<EventCalendarContainer> getListEventsBetween(final LocalDate start, final LocalDate end,

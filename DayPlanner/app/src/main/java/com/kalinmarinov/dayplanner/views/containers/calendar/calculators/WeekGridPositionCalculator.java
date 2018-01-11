@@ -21,7 +21,7 @@ public class WeekGridPositionCalculator implements GridPositionCalculator {
     public List<GridPosition> calculate(final Event event) {
         final Calendar dateCalendar = CalendarUtils.calendarFromDate(event.getStartDate());
         final Calendar endDateCalendar = CalendarUtils.calendarFromDate(event.getEndDate());
-        endDateCalendar.set(Calendar.HOUR_OF_DAY, Constants.DAY_STARTING_HOUR);
+        dateCalendar.set(Calendar.HOUR_OF_DAY, Constants.DAY_STARTING_HOUR);
         final int startDateWeek = dateCalendar.get(Calendar.WEEK_OF_MONTH);
 
         // while current date is before end date and has same day of month as start day
@@ -31,7 +31,7 @@ public class WeekGridPositionCalculator implements GridPositionCalculator {
             final int dayOfWeek = CalendarUtils.getCurrentMonthDayOfWeek(dayOfMonth);
             final GridPosition gridPosition = GridPosition.of(dayOfWeek, ROW_POSITION);
             gridPositions.add(gridPosition);
-            dateCalendar.add(Calendar.DAY_OF_MONTH, 1);
+            dateCalendar.add(Calendar.DAY_OF_YEAR, 1);
         }
         return gridPositions;
     }
